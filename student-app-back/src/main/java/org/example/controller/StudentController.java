@@ -14,11 +14,7 @@ import java.util.List;
 public class StudentController {
 
     @Autowired
-    private final StudentService studentService; // оно жалуется но работает
-
-//    public StudentController(StudentService studentService) { //????????
-//        this.studentService = studentService;
-//    }
+    private final StudentService studentService;
 
     @PostMapping("/add")
     public void addStudent(@RequestBody StudentEntity studentEntity) {

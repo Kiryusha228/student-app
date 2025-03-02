@@ -14,11 +14,6 @@ public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
 
-//
-//    public StudentServiceImpl(StudentRepository studentRepository) { //почему оно просит конструктор?
-//        this.studentRepository = studentRepository;
-//    }
-
     @Override
     public List<StudentEntity> getAllStudents() {
         return studentRepository.findAll().stream().toList();
@@ -37,7 +32,6 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void updateStudent(StudentEntity newStudentEntity) {
         studentRepository.save(newStudentEntity); //возможно надо менять
-        //studentRepository.findById(studentEntity.getId) lombok видимо сдох
     }
 
     @Override
