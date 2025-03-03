@@ -10,15 +10,19 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("user")
+@RequestMapping("student")
 public class StudentController {
 
-    @Autowired
     private final StudentService studentService;
 
     @PostMapping("/add")
     public void addStudent(@RequestBody StudentEntity studentEntity) {
         studentService.createStudent(studentEntity);
+    }
+
+    @GetMapping("/get")
+    public StudentEntity getStudent(Long studentId) {
+        return studentService.getStudentById(studentId);
     }
 
     @PatchMapping("/update")

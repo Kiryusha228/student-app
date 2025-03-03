@@ -21,7 +21,13 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentEntity getStudentById(Long studentId) {
-        return studentRepository.findById(studentId).get();
+        var student = studentRepository.findById(studentId);
+
+         if (student.isPresent()) {
+            return student.get();
+        } else {
+            throw new NullPointerException();
+        }
     }
 
     @Override
@@ -31,7 +37,12 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void updateStudent(StudentEntity newStudentEntity) {
-        studentRepository.save(newStudentEntity); //возможно надо менять
+        var student = studentRepository.findById(newStudentEntity.getId());
+        if (student.isPresent()){
+            studentRepository.save(newStudentEntity);
+        } else {
+            throw new NullPointerException();
+        }
     }
 
     @Override

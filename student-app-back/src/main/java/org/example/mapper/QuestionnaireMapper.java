@@ -3,9 +3,14 @@ package org.example.mapper;
 import org.example.model.dto.QuestionnaireDto;
 import org.example.model.entity.QuestionnaireEntity;
 import org.example.model.entity.StudentEntity;
+import org.springframework.stereotype.Component;
 
+@Component
 public class QuestionnaireMapper {
-    static QuestionnaireEntity questionnaireDtoToQuestionnaireEntity(QuestionnaireDto questionnaireDto, StudentEntity studentEntity){
+    public QuestionnaireEntity questionnaireDtoToQuestionnaireEntity(
+            QuestionnaireDto questionnaireDto,
+            StudentEntity studentEntity
+    ) {
         return new QuestionnaireEntity(
                 questionnaireDto.getId(),
                 questionnaireDto.getUniversity(),
@@ -21,7 +26,9 @@ public class QuestionnaireMapper {
         );
     }
 
-    static QuestionnaireDto questionnaireEntityToQuestionnaireDto(QuestionnaireEntity questionnaireEntity){
+    public QuestionnaireDto questionnaireEntityToQuestionnaireDto(
+            QuestionnaireEntity questionnaireEntity
+    ) {
         return new QuestionnaireDto(
                 questionnaireEntity.getId(),
                 questionnaireEntity.getUniversity(),

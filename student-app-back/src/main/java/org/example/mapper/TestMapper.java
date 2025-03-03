@@ -3,9 +3,11 @@ package org.example.mapper;
 import org.example.model.dto.TestDto;
 import org.example.model.entity.StudentEntity;
 import org.example.model.entity.TestEntity;
+import org.springframework.stereotype.Component;
 
+@Component
 public class TestMapper {
-    static TestEntity testDtoToTestEntity(TestDto testDto, StudentEntity studentEntity){
+    public TestEntity testDtoToTestEntity(TestDto testDto, StudentEntity studentEntity){
         return new TestEntity(
                 testDto.getId(),
                 testDto.getTestResult(),
@@ -14,7 +16,7 @@ public class TestMapper {
         );
     }
 
-    static TestDto testEntityToTestDto(TestEntity testEntity){
+    public TestDto testEntityToTestDto(TestEntity testEntity){
         return new TestDto(
                 testEntity.getId(),
                 testEntity.getTestResult(),
