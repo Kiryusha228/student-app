@@ -15,6 +15,21 @@
 
 <img width="571" alt="image" src="https://github.com/user-attachments/assets/904871d7-425b-4fd0-b5a7-0cc5c77a7abc" />
 
-Теперь можно запускать проект
+3. Среда Keycloak тоже создается в докере при помощи docker-compose (файл уже прописан)
 
-3. После запуска его можно потыкать либо в постгресе, либо в сваггере http://localhost:8080/swagger-ui.html
+После запуска контейнера переходим на http://localhost:8081, вводим логин и пароль (лежат в .env)
+
+4. Добавляем новый realm
+
+<img width="275" alt="image" src="https://github.com/user-attachments/assets/bb4d3cf6-546b-4ce5-85b9-e80e7017e078" />
+
+5. Загружаем туда realm-export.json
+
+<img width="1064" alt="image" src="https://github.com/user-attachments/assets/b4f9d1f9-89da-44c9-ba30-d253d1474b98" />
+
+6. Теперь можно запускать проект
+
+После запуска его можно потыкать либо в постгресе, либо в сваггере http://localhost:8080/swagger-ui.html
+
+
+
