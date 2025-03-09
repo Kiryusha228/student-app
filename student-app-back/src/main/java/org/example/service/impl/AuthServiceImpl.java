@@ -3,9 +3,10 @@ package org.example.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.example.model.dto.AuthenticationRequest;
 import org.example.model.dto.AuthenticationResponse;
+import org.example.model.dto.RegistrationStudentDto;
+import org.example.model.dto.StudentDto;
 import org.example.model.dto.keycloak.KeycloakCredential;
 import org.example.model.dto.keycloak.KeycloakRegistrationRequest;
-import org.example.model.entity.StudentEntity;
 import org.example.service.AuthService;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -59,7 +60,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void registerUserInKeycloak(StudentEntity userEntity) {
+    public void registerUserInKeycloak(RegistrationStudentDto registrationStudentDto) {
 
         var keycloakUrl = dotenv.get("KEYCLOAK_USER_URL");
 
@@ -67,13 +68,13 @@ public class AuthServiceImpl implements AuthService {
 
         credential.add(new KeycloakCredential(
                 "password",
-                userEntity.getPassword(),
+                registrationStudentDto.getPassword(),
                 false)
         );
 
         var registrationRequest = new KeycloakRegistrationRequest(
-                userEntity.getName(),
-                userEntity.getMail(),
+                registrationStudentDto.getName(),
+                registrationStudentDto.getMail(),
                 true,
                 credential
         );

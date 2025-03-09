@@ -5,8 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface StudentRepository extends JpaRepository<StudentEntity, Long> {
+public interface StudentRepository extends JpaRepository<StudentEntity, String> {
 
     @Override
-    Optional<StudentEntity> findById(Long id);
+    Optional<StudentEntity> findById(String id);
 }

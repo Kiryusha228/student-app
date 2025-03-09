@@ -16,5 +16,5 @@ public class QuestionnaireDto {
     private String telegram;
     private String role;
     private String github;
-    private Long studentId;
+    private String studentId;
 }

@@ -20,10 +20,10 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public StudentEntity getStudentById(Long studentId) {
+    public StudentEntity getStudentById(String studentId) {
         var student = studentRepository.findById(studentId);
 
-         if (student.isPresent()) {
+        if (student.isPresent()) {
             return student.get();
         } else {
             throw new NullPointerException();
@@ -38,7 +38,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void updateStudent(StudentEntity newStudentEntity) {
         var student = studentRepository.findById(newStudentEntity.getId());
-        if (student.isPresent()){
+        if (student.isPresent()) {
             studentRepository.save(newStudentEntity);
         } else {
             throw new NullPointerException();
@@ -46,7 +46,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void deleteStudent(Long studentId) {
+    public void deleteStudent(String studentId) {
         studentRepository.deleteById(studentId);
     }
 }

@@ -1,11 +1,14 @@
 package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.mapper.StudentMapper;
+import org.example.model.dto.StudentDto;
 import org.example.model.entity.StudentEntity;
 import org.example.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -14,25 +17,26 @@ import java.util.List;
 public class StudentController {
 
     private final StudentService studentService;
+    private final StudentMapper studentMapper;
 
     @PostMapping("/add")
-    public void addStudent(@RequestBody StudentEntity studentEntity) {
-        studentService.createStudent(studentEntity);
+    public void addStudent(Principal principal, @RequestBody StudentDto studentDto) {
+        studentService.createStudent(studentMapper.studentDtoToStudentEntity(studentDto, principal.getName()));
     }
 
     @GetMapping("/get")
-    public StudentEntity getStudent(Long studentId) {
-        return studentService.getStudentById(studentId);
+    public StudentEntity getStudent(Principal principal) {
+        return studentService.getStudentById(principal.getName());
     }
 
     @PatchMapping("/update")
-    public void updateStudent(@RequestBody StudentEntity newStudentEntity) {
-        studentService.updateStudent(newStudentEntity);
+    public void updateStudent(Principal principal, @RequestBody StudentDto newStudentDto) {
+        studentService.updateStudent(studentMapper.studentDtoToStudentEntity(newStudentDto, principal.getName()));
     }
 
     @DeleteMapping("/delete")
-    public void deleteStudent(Long studentId) {
-        studentService.deleteStudent(studentId);
+    public void deleteStudent(Principal principal) {
+        studentService.deleteStudent(principal.getName());
     }
 
     @GetMapping
