@@ -9,10 +9,11 @@ import org.springframework.stereotype.Component;
 public class QuestionnaireMapper {
     public QuestionnaireEntity questionnaireDtoToQuestionnaireEntity(
             QuestionnaireDto questionnaireDto,
-            StudentEntity studentEntity
+            StudentEntity studentEntity,
+            Long questionnaireId
     ) {
         return new QuestionnaireEntity(
-                questionnaireDto.getId(),
+                questionnaireId,
                 questionnaireDto.getUniversity(),
                 questionnaireDto.getGraduationYear(),
                 questionnaireDto.getFaculty(),
@@ -30,7 +31,6 @@ public class QuestionnaireMapper {
             QuestionnaireEntity questionnaireEntity
     ) {
         return new QuestionnaireDto(
-                questionnaireEntity.getId(),
                 questionnaireEntity.getUniversity(),
                 questionnaireEntity.getGraduationYear(),
                 questionnaireEntity.getFaculty(),
@@ -39,8 +39,7 @@ public class QuestionnaireMapper {
                 questionnaireEntity.getLanguageExperience(),
                 questionnaireEntity.getTelegram(),
                 questionnaireEntity.getRole(),
-                questionnaireEntity.getGithub(),
-                questionnaireEntity.getStudent().getId()
+                questionnaireEntity.getGithub()
         );
     }
 }

@@ -24,7 +24,7 @@ public class SecurityConfig {
                                 "/webjars/**",
                                 "/api/auth/**"
                         ).permitAll()
-                        .anyRequest().permitAll()//.authenticated()
+                        .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(Customizer.withDefaults())

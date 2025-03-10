@@ -17,9 +17,6 @@ public class TestEntity {
     @Column(name = "test_result")
     private Integer testResult;
 
-    @Column(name = "contest_result")
-    private Integer contestResult;
-
     @OneToOne
     @JoinColumn(name = "student_id")
     private StudentEntity student;

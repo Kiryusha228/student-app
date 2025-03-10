@@ -4,11 +4,11 @@ import org.example.model.dto.QuestionnaireDto;
 
 public interface QuestionnaireService {
 
-    QuestionnaireDto getQuestionnaireById(Long questionnaireId);
+    QuestionnaireDto getQuestionnaireByStudentId(String studentId);
 
-    void createQuestionnaire(QuestionnaireDto questionnaireDto);
+    void createQuestionnaire(QuestionnaireDto questionnaireDto, String studentId);
 
-    void updateQuestionnaire(QuestionnaireDto questionnaireDto);
+    void updateQuestionnaire(QuestionnaireDto questionnaireDto, String studentId);
 
-    void deleteQuestionnaire(Long questionnaireId);
+    void deleteQuestionnaire(String studentId);
 }

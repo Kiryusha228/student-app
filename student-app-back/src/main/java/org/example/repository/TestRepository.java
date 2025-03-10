@@ -1,5 +1,6 @@
 package org.example.repository;
 
+import org.example.model.entity.StudentEntity;
 import org.example.model.entity.TestEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -9,4 +10,6 @@ public interface TestRepository extends JpaRepository<TestEntity, Long> {
 
     @Override
     Optional<TestEntity> findById(Long id);
+
+    Optional<TestEntity> findByStudent(StudentEntity student);
 }

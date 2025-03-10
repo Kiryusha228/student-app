@@ -18,8 +18,11 @@ public class TestServiceImpl implements TestService {
     private final TestMapper testMapper;
 
     @Override
-    public TestDto getTestById(Long testId) {
-        var test = testRepository.findById(testId);
+    public TestDto getTest(String studentId) {
+        var test = testRepository.findByStudent(
+                studentRepository.findById(studentId).get()
+        );
+
         if (test.isPresent()){
             return testMapper.testEntityToTestDto(test.get());
         }
@@ -29,10 +32,16 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public void createTest(TestDto testDto) {
-        var student = studentRepository.findById(testDto.getStudentId());
+    public void createTest(TestDto testDto, String studentId) {
+        var student = studentRepository.findById(studentId);
+
         if (student.isPresent()){
-            testRepository.save(testMapper.testDtoToTestEntity(testDto, student.get()));
+            testRepository.save(
+                    testMapper.testDtoToTestEntity(
+                            testDto,
+                            student.get(),
+                            0L)
+            );
         }
         else {
             throw new NullPointerException();
@@ -40,7 +49,11 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public void deleteTest(Long testId) {
-        testRepository.deleteById(testId);
+    public void deleteTest(String studentId) {
+        testRepository.delete(
+                testRepository.findByStudent(
+                        studentRepository.findById(studentId).get()
+                ).get()
+        );
     }
 }

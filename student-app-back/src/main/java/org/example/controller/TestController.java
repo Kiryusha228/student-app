@@ -5,6 +5,8 @@ import org.example.model.dto.TestDto;
 import org.example.service.TestService;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("test")
@@ -13,17 +15,17 @@ public class TestController {
     private final TestService testService;
 
     @PostMapping("/add")
-    public void addTest(@RequestBody TestDto testDto) {
-        testService.createTest(testDto);
+    public void addTest(Principal principal, @RequestBody TestDto testDto) {
+        testService.createTest(testDto, principal.getName());
     }
 
     @GetMapping("/get")
-    public TestDto getQuestionnaire(Long testId) {
-        return testService.getTestById(testId);
+    public TestDto getTest(Principal principal) {
+        return testService.getTest(principal.getName());
     }
 
     @DeleteMapping("/delete")
-    public void deleteQuestionnaire(Long testId) {
-        testService.deleteTest(testId);
+    public void deleteQuestionnaire(Principal principal) {
+        testService.deleteTest(principal.getName());
     }
 }

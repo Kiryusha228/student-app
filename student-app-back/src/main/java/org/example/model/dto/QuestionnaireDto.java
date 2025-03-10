@@ -3,10 +3,10 @@ package org.example.model.dto;
 
 import lombok.*;
 
+@NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class QuestionnaireDto {
-    private Long id;
     private String university;
     private Integer graduationYear;
     private String faculty;
@@ -16,5 +16,4 @@ public class QuestionnaireDto {
     private String telegram;
     private String role;
     private String github;
-    private String studentId;
 }

@@ -2,11 +2,9 @@ package org.example.model.dto;
 
 import lombok.*;
 
+@NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class TestDto {
-    private Long id;
     private Integer testResult;
-    private Integer contestResult;
-    private String studentId;
 }

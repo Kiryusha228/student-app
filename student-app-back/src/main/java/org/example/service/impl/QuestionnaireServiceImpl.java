@@ -3,7 +3,6 @@ package org.example.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.example.mapper.QuestionnaireMapper;
 import org.example.model.dto.QuestionnaireDto;
-import org.example.model.entity.QuestionnaireEntity;
 import org.example.repository.QuestionnaireRepository;
 import org.example.repository.StudentRepository;
 import org.example.service.QuestionnaireService;
@@ -18,8 +17,8 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     private final QuestionnaireMapper questionnaireMapper;
 
     @Override
-    public QuestionnaireDto getQuestionnaireById(Long questionnaireId) {
-        var questionnaire = questionnaireRepository.findById(questionnaireId);
+    public QuestionnaireDto getQuestionnaireByStudentId(String studentId) {
+        var questionnaire = questionnaireRepository.findByStudent(studentRepository.findById(studentId).get());
 
         if (questionnaire.isPresent()) {
             return questionnaireMapper.questionnaireEntityToQuestionnaireDto(questionnaire.get());
@@ -29,10 +28,16 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     }
 
     @Override
-    public void createQuestionnaire(QuestionnaireDto questionnaireDto) {
-        var student = studentRepository.findById(questionnaireDto.getStudentId());
+    public void createQuestionnaire(QuestionnaireDto questionnaireDto, String studentId) {
+        var student = studentRepository.findById(studentId);
         if (student.isPresent()) {
-            questionnaireRepository.save(questionnaireMapper.questionnaireDtoToQuestionnaireEntity(questionnaireDto, student.get()));
+            questionnaireRepository.save(
+                    questionnaireMapper.questionnaireDtoToQuestionnaireEntity(
+                            questionnaireDto,
+                            student.get(),
+                            0L
+                    )
+            );
         }
         else {
             throw new NullPointerException();
@@ -40,11 +45,17 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     }
 
     @Override
-    public void updateQuestionnaire(QuestionnaireDto questionnaireDto) {
-        var student = studentRepository.findById(questionnaireDto.getStudentId());
-        var questionnaire = questionnaireRepository.findById(questionnaireDto.getId());
+    public void updateQuestionnaire(QuestionnaireDto questionnaireDto, String studentId) {
+        var student = studentRepository.findById(studentId);
+        var questionnaire = questionnaireRepository.findByStudent(student.get());
+
         if (student.isPresent() && questionnaire.isPresent()) {
-            questionnaireRepository.save(questionnaireMapper.questionnaireDtoToQuestionnaireEntity(questionnaireDto, student.get()));
+            questionnaireRepository.save(questionnaireMapper.questionnaireDtoToQuestionnaireEntity(
+                    questionnaireDto,
+                    student.get(),
+                    questionnaire.get().getId()
+                    )
+            );
         }
         else {
             throw new NullPointerException();
@@ -52,7 +63,11 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     }
 
     @Override
-    public void deleteQuestionnaire(Long questionnaireId) {
-        questionnaireRepository.deleteById(questionnaireId);
+    public void deleteQuestionnaire(String  studentId) {
+        questionnaireRepository.delete(
+                questionnaireRepository.findByStudent(
+                        studentRepository.findById(studentId).get()
+                ).get()
+        );
     }
 }
