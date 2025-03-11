@@ -1,0 +1,23 @@
+package ru.tbank.config;
+
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
+//import lombok.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.stereotype.Component;
+
+@Configuration
+@EnableScheduling
+@Data
+@PropertySource("application.properties")
+@Component
+public class BotConfig {
+
+    @Value("${bot.name}")
+    private String botName;
+
+    @Value("${bot.token}")
+    private String token;
+}

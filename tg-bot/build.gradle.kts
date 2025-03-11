@@ -1,8 +1,10 @@
 plugins {
     id("java")
+    id("org.springframework.boot") version "3.4.0"
+    id("io.spring.dependency-management") version "1.1.4" // Подключите Dependency Management Pl
 }
 
-group = "org.example"
+group = "ru.tbank"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -12,6 +14,17 @@ repositories {
 dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    implementation("org.telegram:telegrambots:6.5.0")
+    implementation("org.json:json:20241224")
+    implementation("org.projectlombok:lombok:1.18.30")
+    annotationProcessor("org.projectlombok:lombok:1.18.30")
+    implementation("org.springframework:spring-context:6.2.0")
+    implementation("org.springframework.boot:spring-boot:3.4.0")
+    implementation("org.springframework.boot:spring-boot-autoconfigure:3.4.0")
+    //testImplementation("org.springframework.boot:spring-boot-starter-test:3.4.0")
+    implementation("org.slf4j:slf4j-api:2.0.12")
+    implementation("ch.qos.logback:logback-classic:1.4.14")
+
 }
 
 tasks.test {
