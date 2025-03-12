@@ -7,17 +7,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TestMapper {
-    public TestEntity testDtoToTestEntity(TestDto testDto, StudentEntity studentEntity, Long testId) {
-        return new TestEntity(
-                testId,
-                testDto.getTestResult(),
-                studentEntity
-        );
-    }
+  public TestEntity testDtoToTestEntity(TestDto testDto, StudentEntity studentEntity, Long testId) {
+    return new TestEntity(testId, testDto.getTestResult(), studentEntity);
+  }
 
-    public TestDto testEntityToTestDto(TestEntity testEntity) {
-        return new TestDto(
-                testEntity.getTestResult()
-        );
-    }
+  public TestDto testEntityToTestDto(TestEntity testEntity) {
+    return new TestDto(testEntity.getTestResult());
+  }
 }

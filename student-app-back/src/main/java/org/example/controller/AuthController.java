@@ -14,44 +14,37 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final AuthService authService;
-    private final StudentService studentService;
-    private final StudentMapper studentMapper;
+  private final AuthService authService;
+  private final StudentService studentService;
+  private final StudentMapper studentMapper;
 
-    private final JwtDecoder jwtDecoder;
+  private final JwtDecoder jwtDecoder;
 
-    @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> registerUser(@RequestBody RegistrationStudentDto registrationStudentDto) {
+  @PostMapping("/register")
+  public ResponseEntity<AuthenticationResponse> registerUser(
+      @RequestBody RegistrationStudentDto registrationStudentDto) {
 
-        authService.registerUserInKeycloak(registrationStudentDto);
+    authService.registerUserInKeycloak(registrationStudentDto);
 
-        var token = authService.authenticateUser(new AuthenticationRequest(
-                        registrationStudentDto.getName(),
-                        registrationStudentDto.getPassword()
-                )
-        );
+    var token =
+        authService.authenticateUser(
+            new AuthenticationRequest(
+                registrationStudentDto.getName(), registrationStudentDto.getPassword()));
 
-        studentService.createStudent(
-                studentMapper.registrationStudentDtoToStudentEntity(
-                        registrationStudentDto,
-                        jwtDecoder.decode(token.getToken()).getSubject()
-                )
-        );
-        return ResponseEntity.ok(token);
-    }
+    studentService.createStudent(
+        studentMapper.registrationStudentDtoToStudentEntity(
+            registrationStudentDto, jwtDecoder.decode(token.getToken()).getSubject()));
+    return ResponseEntity.ok(token);
+  }
 
-    @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticateUser(@RequestBody AuthenticationRequest request) {
-        return ResponseEntity.ok(authService.authenticateUser(request));
-    }
-
-
+  @PostMapping("/authenticate")
+  public ResponseEntity<AuthenticationResponse> authenticateUser(
+      @RequestBody AuthenticationRequest request) {
+    return ResponseEntity.ok(authService.authenticateUser(request));
+  }
 }
-
-

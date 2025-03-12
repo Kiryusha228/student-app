@@ -9,15 +9,15 @@ import lombok.*;
 @NoArgsConstructor
 @Data
 public class TestEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private Long id;
 
-    @Column(name = "test_result")
-    private Integer testResult;
+  @Column(name = "test_result")
+  private Integer testResult;
 
-    @OneToOne
-    @JoinColumn(name = "student_id")
-    private StudentEntity student;
+  @OneToOne
+  @JoinColumn(name = "student_id")
+  private StudentEntity student;
 }

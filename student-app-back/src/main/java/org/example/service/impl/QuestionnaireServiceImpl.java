@@ -12,62 +12,51 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class QuestionnaireServiceImpl implements QuestionnaireService {
 
-    private final QuestionnaireRepository questionnaireRepository;
-    private final StudentRepository studentRepository;
-    private final QuestionnaireMapper questionnaireMapper;
+  private final QuestionnaireRepository questionnaireRepository;
+  private final StudentRepository studentRepository;
+  private final QuestionnaireMapper questionnaireMapper;
 
-    @Override
-    public QuestionnaireDto getQuestionnaireByStudentId(String studentId) {
-        var questionnaire = questionnaireRepository.findByStudent(studentRepository.findById(studentId).get());
+  @Override
+  public QuestionnaireDto getQuestionnaireByStudentId(String studentId) {
+    var questionnaire =
+        questionnaireRepository.findByStudent(studentRepository.findById(studentId).get());
 
-        if (questionnaire.isPresent()) {
-            return questionnaireMapper.questionnaireEntityToQuestionnaireDto(questionnaire.get());
-        } else {
-            throw new NullPointerException();
-        }
+    if (questionnaire.isPresent()) {
+      return questionnaireMapper.questionnaireEntityToQuestionnaireDto(questionnaire.get());
+    } else {
+      throw new NullPointerException();
     }
+  }
 
-    @Override
-    public void createQuestionnaire(QuestionnaireDto questionnaireDto, String studentId) {
-        var student = studentRepository.findById(studentId);
-        if (student.isPresent()) {
-            questionnaireRepository.save(
-                    questionnaireMapper.questionnaireDtoToQuestionnaireEntity(
-                            questionnaireDto,
-                            student.get(),
-                            0L
-                    )
-            );
-        }
-        else {
-            throw new NullPointerException();
-        }
+  @Override
+  public void createQuestionnaire(QuestionnaireDto questionnaireDto, String studentId) {
+    var student = studentRepository.findById(studentId);
+    if (student.isPresent()) {
+      questionnaireRepository.save(
+          questionnaireMapper.questionnaireDtoToQuestionnaireEntity(
+              questionnaireDto, student.get(), 0L));
+    } else {
+      throw new NullPointerException();
     }
+  }
 
-    @Override
-    public void updateQuestionnaire(QuestionnaireDto questionnaireDto, String studentId) {
-        var student = studentRepository.findById(studentId);
-        var questionnaire = questionnaireRepository.findByStudent(student.get());
+  @Override
+  public void updateQuestionnaire(QuestionnaireDto questionnaireDto, String studentId) {
+    var student = studentRepository.findById(studentId);
+    var questionnaire = questionnaireRepository.findByStudent(student.get());
 
-        if (student.isPresent() && questionnaire.isPresent()) {
-            questionnaireRepository.save(questionnaireMapper.questionnaireDtoToQuestionnaireEntity(
-                    questionnaireDto,
-                    student.get(),
-                    questionnaire.get().getId()
-                    )
-            );
-        }
-        else {
-            throw new NullPointerException();
-        }
+    if (student.isPresent() && questionnaire.isPresent()) {
+      questionnaireRepository.save(
+          questionnaireMapper.questionnaireDtoToQuestionnaireEntity(
+              questionnaireDto, student.get(), questionnaire.get().getId()));
+    } else {
+      throw new NullPointerException();
     }
+  }
 
-    @Override
-    public void deleteQuestionnaire(String  studentId) {
-        questionnaireRepository.delete(
-                questionnaireRepository.findByStudent(
-                        studentRepository.findById(studentId).get()
-                ).get()
-        );
-    }
+  @Override
+  public void deleteQuestionnaire(String studentId) {
+    questionnaireRepository.delete(
+        questionnaireRepository.findByStudent(studentRepository.findById(studentId).get()).get());
+  }
 }
