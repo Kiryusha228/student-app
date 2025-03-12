@@ -6,6 +6,6 @@ import lombok.*;
 @AllArgsConstructor
 @Data
 public class StudentDto {
-    private String name;
-    private String mail;
+  private String name;
+  private String mail;
 }

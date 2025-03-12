@@ -6,7 +6,7 @@ import org.example.model.dto.RegistrationStudentDto;
 
 public interface AuthService {
 
-    AuthenticationResponse authenticateUser(AuthenticationRequest request);
+  AuthenticationResponse authenticateUser(AuthenticationRequest request);
 
-    void registerUserInKeycloak(RegistrationStudentDto registrationStudentDto);
+  void registerUserInKeycloak(RegistrationStudentDto registrationStudentDto);
 }

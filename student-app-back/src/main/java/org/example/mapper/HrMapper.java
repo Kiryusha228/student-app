@@ -5,8 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class HrMapper {
-    public HrEntity telegramChatIdToHrEntity(Long telegramChatId){
-        return new HrEntity(telegramChatId);
-    }
-
+  public HrEntity telegramChatIdToHrEntity(Long telegramChatId) {
+    return new HrEntity(telegramChatId);
+  }
 }

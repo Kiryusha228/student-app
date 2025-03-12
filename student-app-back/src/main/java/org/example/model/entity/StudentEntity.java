@@ -1,4 +1,5 @@
 package org.example.model.entity;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,13 +9,13 @@ import lombok.*;
 @NoArgsConstructor
 @Data
 public class StudentEntity {
-    @Id
-    @Column(name = "id")
-    private String id;
+  @Id
+  @Column(name = "id")
+  private String id;
 
-    @Column(name = "name")
-    private String name;
+  @Column(name = "name")
+  private String name;
 
-    @Column(name = "mail")
-    private String mail;
+  @Column(name = "mail")
+  private String mail;
 }

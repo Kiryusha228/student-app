@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Data
 public class HrEntity {
-    @Id
-    @Column(name = "telegram_chat_id")
-    private Long telegramChatId;
+  @Id
+  @Column(name = "telegram_chat_id")
+  private Long telegramChatId;
 }
