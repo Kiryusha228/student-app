@@ -5,6 +5,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class TestDto {
-  private Integer testResult;
+public class StudentTestResultDto {
+    private Integer testResult;
 }
