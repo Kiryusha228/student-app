@@ -9,23 +9,23 @@ import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("test-result")
+@RequestMapping("/api/test-result")
 public class StudentTestResultController {
 
     private final StudentTestResultService testService;
 
     @PostMapping("/add")
     public void addTest(Principal principal, @RequestBody StudentTestResultDto testDto) {
-        testService.createTest(testDto, principal.getName());
+        testService.createTestResult(testDto, principal.getName());
     }
 
     @GetMapping("/get")
     public StudentTestResultDto getTest(Principal principal) {
-        return testService.getTest(principal.getName());
+        return testService.getTestResult(principal.getName());
     }
 
     @DeleteMapping("/delete")
     public void deleteQuestionnaire(Principal principal) {
-        testService.deleteTest(principal.getName());
+        testService.deleteTestResult(principal.getName());
     }
 }
