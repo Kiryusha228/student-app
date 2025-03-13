@@ -9,7 +9,7 @@ import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("test")
+@RequestMapping("test-result")
 public class StudentTestResultController {
 
     private final StudentTestResultService testService;
