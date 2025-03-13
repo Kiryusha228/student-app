@@ -1,8 +1,8 @@
 package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.model.dto.TestDto;
-import org.example.service.TestService;
+import org.example.model.dto.StudentTestResultDto;
+import org.example.service.StudentTestResultService;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -10,17 +10,17 @@ import java.security.Principal;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("test")
-public class TestController {
+public class StudentTestResultController {
 
-    private final TestService testService;
+    private final StudentTestResultService testService;
 
     @PostMapping("/add")
-    public void addTest(Principal principal, @RequestBody TestDto testDto) {
+    public void addTest(Principal principal, @RequestBody StudentTestResultDto testDto) {
         testService.createTest(testDto, principal.getName());
     }
 
     @GetMapping("/get")
-    public TestDto getTest(Principal principal) {
+    public StudentTestResultDto getTest(Principal principal) {
         return testService.getTest(principal.getName());
     }
 
