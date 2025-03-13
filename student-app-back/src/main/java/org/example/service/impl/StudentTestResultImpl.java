@@ -18,7 +18,7 @@ public class StudentTestResultImpl implements StudentTestResultService {
     private final TestMapper testMapper;
 
     @Override
-    public StudentTestResultDto getTest(String studentId) {
+    public StudentTestResultDto getTestResult(String studentId) {
         var test = testRepository.findByStudent(
                 studentRepository.findById(studentId).get()
         );
@@ -32,7 +32,7 @@ public class StudentTestResultImpl implements StudentTestResultService {
     }
 
     @Override
-    public void createTest(StudentTestResultDto testDto, String studentId) {
+    public void createTestResult(StudentTestResultDto testDto, String studentId) {
         var student = studentRepository.findById(studentId);
 
         if (student.isPresent()){
@@ -49,7 +49,7 @@ public class StudentTestResultImpl implements StudentTestResultService {
     }
 
     @Override
-    public void deleteTest(String studentId) {
+    public void deleteTestResult(String studentId) {
         testRepository.delete(
                 testRepository.findByStudent(
                         studentRepository.findById(studentId).get()

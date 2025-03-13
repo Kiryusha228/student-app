@@ -3,9 +3,9 @@ package org.example.service;
 import org.example.model.dto.StudentTestResultDto;
 
 public interface StudentTestResultService {
-    StudentTestResultDto getTest(String studentId);
+    StudentTestResultDto getTestResult(String studentId);
 
-    void createTest(StudentTestResultDto testDto, String studentId);
+    void createTestResult(StudentTestResultDto testDto, String studentId);
 
-    void deleteTest(String studentId);
+    void deleteTestResult(String studentId);
 }

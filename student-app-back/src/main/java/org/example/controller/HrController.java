@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("hr")
+@RequestMapping("/api/hr")
 public class HrController {
 
   private final HrService hrService;

@@ -22,7 +22,10 @@ public class SecurityConfig {
                         "/v3/api-docs/**",
                         "/swagger-resources/**",
                         "/webjars/**",
-                        "/api/auth/**")
+                        "/api/auth/**",
+                        "/api/test/add",
+                        "/api/test/get",
+                        "/api/test/delete")
                     .permitAll()
                     .anyRequest()
                     .authenticated())

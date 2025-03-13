@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("questionnaire")
+@RequestMapping("/api/questionnaire")
 public class QuestionnaireController {
 
   private final QuestionnaireService questionnaireService;
