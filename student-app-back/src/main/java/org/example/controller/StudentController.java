@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.example.mapper.StudentMapper;
+import org.example.model.dto.StudentInfoDto;
 import org.example.model.dto.StudentDto;
 import org.example.model.entity.StudentEntity;
 import org.example.service.StudentService;
@@ -40,7 +41,7 @@ public class StudentController {
   }
 
   @GetMapping
-  public List<StudentEntity> getAllStudents() {
+  public List<StudentInfoDto> getAllStudents() {
     return studentService.getAllStudents();
   }
 }

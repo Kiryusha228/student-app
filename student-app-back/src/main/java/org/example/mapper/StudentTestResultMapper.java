@@ -6,7 +6,7 @@ import org.example.model.entity.StudentTestResultEntity;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TestMapper {
+public class StudentTestResultMapper {
     public StudentTestResultEntity testDtoToTestEntity(StudentTestResultDto testDto, StudentEntity studentEntity, Long testId) {
         return new StudentTestResultEntity(
                 testId,
