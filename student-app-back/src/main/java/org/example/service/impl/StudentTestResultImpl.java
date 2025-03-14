@@ -1,7 +1,7 @@
 package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.example.mapper.TestMapper;
+import org.example.mapper.StudentTestResultMapper;
 import org.example.model.dto.StudentTestResultDto;
 import org.example.repository.StudentRepository;
 import org.example.repository.StudentTestResultRepository;
@@ -15,7 +15,7 @@ public class StudentTestResultImpl implements StudentTestResultService {
 
     private final StudentTestResultRepository testRepository;
     private final StudentRepository studentRepository;
-    private final TestMapper testMapper;
+    private final StudentTestResultMapper testMapper;
 
     @Override
     public StudentTestResultDto getTestResult(String studentId) {
