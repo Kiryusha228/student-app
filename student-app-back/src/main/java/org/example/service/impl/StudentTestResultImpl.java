@@ -2,6 +2,7 @@ package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.example.exception.StudentNotFoundException;
+import org.example.exception.StudentTestResultAlreadyExistException;
 import org.example.exception.StudentTestResultNotFoundException;
 import org.example.mapper.StudentTestResultMapper;
 import org.example.model.dto.database.StudentTestResultDto;
@@ -42,6 +43,10 @@ public class StudentTestResultImpl implements StudentTestResultService {
 
         if (student.isEmpty()) {
             throw new StudentNotFoundException("Студент не найден");
+        }
+
+        if (testRepository.findByStudent(student.get()).isPresent()) {
+            throw new StudentTestResultAlreadyExistException("Данный студент уже решал тест");
         }
 
         testRepository.save(
