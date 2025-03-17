@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Usage {
-    String inputTextTokens;
-    String completionTokens;
-    String totalTokens;
-    Object completionTokensDetails;
+  String inputTextTokens;
+  String completionTokens;
+  String totalTokens;
+  Object completionTokensDetails;
 }

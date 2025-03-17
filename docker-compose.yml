@@ -17,6 +17,7 @@ services:
       - 'POSTGRES_DB=${DB_NAME}'
     volumes:
       - student-app-db:/var/lib/postgresql/data
+
   keycloak_db:
     image: postgres:14
     environment:
@@ -27,6 +28,7 @@ services:
       - ./postgres-keycloak-data:/var/lib/postgresql/data
     ports:
       - "5433:5432"
+
   keycloak:
     image: quay.io/keycloak/keycloak:21.1
     environment:
@@ -45,3 +47,20 @@ services:
       - "8081:8080"
     depends_on:
       - keycloak_db
+
+  student-app-back:
+    container_name: 'student-app-back'
+    image: 'student-app-back'
+    build:
+      context: ./
+      dockerfile: 'student-app-back/Dockerfile'
+    env_file:
+      - .env
+    environment:
+      - JAVA_OPTS=-Xmx512M
+      - SPRING_DATASOURCE_URL=${DB_LINK}
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "8080:8080"
+    restart: on-failure

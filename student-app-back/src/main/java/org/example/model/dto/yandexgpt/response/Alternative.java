@@ -9,6 +9,6 @@ import org.example.model.dto.yandexgpt.Message;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Alternative {
-    Message message;
-    String status;
+  Message message;
+  String status;
 }

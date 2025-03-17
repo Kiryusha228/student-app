@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.CONFLICT)
 public class StudentTestResultAlreadyExistException extends RuntimeException {
-    public StudentTestResultAlreadyExistException(String message) {
-        super(message);
-    }
+  public StudentTestResultAlreadyExistException(String message) {
+    super(message);
+  }
 }

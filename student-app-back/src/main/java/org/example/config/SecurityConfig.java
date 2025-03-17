@@ -27,7 +27,7 @@ public class SecurityConfig {
                         "/api/test/get",
                         "/api/test/delete",
                         "/api/student",
-                        "/api/gpt/**"        )
+                        "/api/gpt/**")
                     .permitAll()
                     .anyRequest()
                     .authenticated())

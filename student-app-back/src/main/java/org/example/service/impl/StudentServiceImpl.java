@@ -2,7 +2,6 @@ package org.example.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import org.example.exception.StudentNotFoundException;
 import org.example.mapper.StudentMapper;
@@ -18,62 +17,59 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
 
-    private final StudentRepository studentRepository;
-    private final StudentTestResultRepository studentTestResultRepository;
-    private final QuestionnaireRepository questionnaireRepository;
+  private final StudentRepository studentRepository;
+  private final StudentTestResultRepository studentTestResultRepository;
+  private final QuestionnaireRepository questionnaireRepository;
 
-    private final StudentMapper studentMapper;
+  private final StudentMapper studentMapper;
 
-    @Override
-    public List<StudentInfoDto> getAllStudents() {
-        var students = studentRepository.findAll().stream().toList();
+  @Override
+  public List<StudentInfoDto> getAllStudents() {
+    var students = studentRepository.findAll().stream().toList();
 
-        var allStudentsInfo = new ArrayList<StudentInfoDto>();
+    var allStudentsInfo = new ArrayList<StudentInfoDto>();
 
-        for (StudentEntity student : students) {
-            var testResult = studentTestResultRepository.findByStudent(student);
-            var questionnaire = questionnaireRepository.findByStudent(student);
-            if (testResult.isPresent() && questionnaire.isPresent()) {
-                allStudentsInfo.add(
-                        studentMapper.toStudentInfoDto(
-                                student,
-                                questionnaire.get(),
-                                testResult.get()));
-            }
-        }
-
-        return allStudentsInfo;
+    for (StudentEntity student : students) {
+      var testResult = studentTestResultRepository.findByStudent(student);
+      var questionnaire = questionnaireRepository.findByStudent(student);
+      if (testResult.isPresent() && questionnaire.isPresent()) {
+        allStudentsInfo.add(
+            studentMapper.toStudentInfoDto(student, questionnaire.get(), testResult.get()));
+      }
     }
 
-    @Override
-    public StudentEntity getStudentById(String studentId) {
-        var student = studentRepository.findById(studentId);
+    return allStudentsInfo;
+  }
 
-        if (student.isEmpty()) {
-            throw new StudentNotFoundException("Студент не найден");
-        }
+  @Override
+  public StudentEntity getStudentById(String studentId) {
+    var student = studentRepository.findById(studentId);
 
-        return student.get();
+    if (student.isEmpty()) {
+      throw new StudentNotFoundException("Студент не найден");
     }
 
-    @Override
-    public void createStudent(StudentEntity studentEntity) {
-        studentRepository.save(studentEntity);
+    return student.get();
+  }
+
+  @Override
+  public void createStudent(StudentEntity studentEntity) {
+    studentRepository.save(studentEntity);
+  }
+
+  @Override
+  public void updateStudent(StudentEntity newStudentEntity) {
+    var student = studentRepository.findById(newStudentEntity.getId());
+
+    if (student.isEmpty()) {
+      throw new StudentNotFoundException("Студент не найден");
     }
 
-    @Override
-    public void updateStudent(StudentEntity newStudentEntity) {
-        var student = studentRepository.findById(newStudentEntity.getId());
+    studentRepository.save(newStudentEntity);
+  }
 
-        if (student.isEmpty()) {
-            throw new StudentNotFoundException("Студент не найден");
-        }
-
-        studentRepository.save(newStudentEntity);
-    }
-
-    @Override
-    public void deleteStudent(String studentId) {
-        studentRepository.deleteById(studentId);
-    }
+  @Override
+  public void deleteStudent(String studentId) {
+    studentRepository.deleteById(studentId);
+  }
 }
