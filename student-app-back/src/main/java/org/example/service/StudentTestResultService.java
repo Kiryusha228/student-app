@@ -1,6 +1,6 @@
 package org.example.service;
 
-import org.example.model.dto.StudentTestResultDto;
+import org.example.model.dto.database.StudentTestResultDto;
 
 public interface StudentTestResultService {
     StudentTestResultDto getTestResult(String studentId);

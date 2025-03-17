@@ -3,7 +3,7 @@ package org.example.controller;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.example.mapper.QuestionnaireMapper;
-import org.example.model.dto.QuestionnaireDto;
+import org.example.model.dto.database.QuestionnaireDto;
 import org.example.service.QuestionnaireService;
 import org.example.service.StudentService;
 import org.springframework.web.bind.annotation.*;

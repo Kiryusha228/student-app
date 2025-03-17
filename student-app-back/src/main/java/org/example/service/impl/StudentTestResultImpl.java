@@ -1,8 +1,10 @@
 package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.example.exception.StudentNotFoundException;
+import org.example.exception.StudentTestResultNotFoundException;
 import org.example.mapper.StudentTestResultMapper;
-import org.example.model.dto.StudentTestResultDto;
+import org.example.model.dto.database.StudentTestResultDto;
 import org.example.repository.StudentRepository;
 import org.example.repository.StudentTestResultRepository;
 import org.example.service.StudentTestResultService;
@@ -19,41 +21,50 @@ public class StudentTestResultImpl implements StudentTestResultService {
 
     @Override
     public StudentTestResultDto getTestResult(String studentId) {
-        var test = testRepository.findByStudent(
-                studentRepository.findById(studentId).get()
-        );
+        var student = studentRepository.findById(studentId);
 
-        if (test.isPresent()){
-            return testMapper.testEntityToTestDto(test.get());
+        if (student.isEmpty()) {
+            throw new StudentNotFoundException("Студент не найден");
         }
-        else {
-            throw new NullPointerException();
+
+        var testResult = testRepository.findByStudent(student.get());
+
+        if (testResult.isEmpty()) {
+            throw new StudentTestResultNotFoundException("У данного студента нет результатов теста");
         }
+
+        return testMapper.testEntityToTestDto(testResult.get());
     }
 
     @Override
     public void createTestResult(StudentTestResultDto testDto, String studentId) {
         var student = studentRepository.findById(studentId);
 
-        if (student.isPresent()){
-            testRepository.save(
-                    testMapper.testDtoToTestEntity(
-                            testDto,
-                            student.get(),
-                            0L)
-            );
+        if (student.isEmpty()) {
+            throw new StudentNotFoundException("Студент не найден");
         }
-        else {
-            throw new NullPointerException();
-        }
+
+        testRepository.save(
+                testMapper.testDtoToTestEntity(
+                        testDto,
+                        student.get(),
+                        0L));
     }
 
     @Override
     public void deleteTestResult(String studentId) {
-        testRepository.delete(
-                testRepository.findByStudent(
-                        studentRepository.findById(studentId).get()
-                ).get()
-        );
+        var student = studentRepository.findById(studentId);
+
+        if (student.isEmpty()) {
+            throw new StudentNotFoundException("Студент не найден");
+        }
+
+        var testResult = testRepository.findByStudent(student.get());
+
+        if (testResult.isEmpty()) {
+            throw new StudentTestResultNotFoundException("У данного студента нет результатов теста");
+        }
+
+        testRepository.delete(testResult.get());
     }
 }

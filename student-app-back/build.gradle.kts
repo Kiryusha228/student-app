@@ -3,6 +3,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.6"
     id("com.diffplug.spotless") version "6.25.0"
     id("java")
+    kotlin("jvm")
 }
 
 group = "org.example"
@@ -17,7 +18,7 @@ dependencies {
     implementation ("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
     implementation("org.springframework.boot:spring-boot-starter")
-    implementation("org.springframework.boot:spring-boot-starter-webflux:3.4.3")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
 
     implementation("org.projectlombok:lombok:1.18.34")
     annotationProcessor("org.projectlombok:lombok:1.18.34")
@@ -31,6 +32,7 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
 
     implementation("io.github.cdimascio:dotenv-java:2.3.2")
+    implementation(kotlin("stdlib-jdk8"))
 
 }
 
@@ -46,4 +48,7 @@ spotless {
 
 tasks.test {
     useJUnitPlatform()
+}
+kotlin {
+    jvmToolchain(17)
 }

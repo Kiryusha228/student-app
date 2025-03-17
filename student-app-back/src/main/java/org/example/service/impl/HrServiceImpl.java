@@ -10,16 +10,16 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class HrServiceImpl implements HrService {
 
-  private final HrRepository hrRepository;
-  private final HrMapper hrMapper;
+    private final HrRepository hrRepository;
+    private final HrMapper hrMapper;
 
-  @Override
-  public void createHr(Long telegramChatId) {
-    hrRepository.save(hrMapper.telegramChatIdToHrEntity(telegramChatId));
-  }
+    @Override
+    public void createHr(Long telegramChatId) {
+        hrRepository.save(hrMapper.telegramChatIdToHrEntity(telegramChatId));
+    }
 
-  @Override
-  public void deleteHr(Long telegramChatId) {
-    hrRepository.deleteById(telegramChatId);
-  }
+    @Override
+    public void deleteHr(Long telegramChatId) {
+        hrRepository.deleteById(telegramChatId);
+    }
 }

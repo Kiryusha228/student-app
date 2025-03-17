@@ -1,8 +1,8 @@
 package org.example.mapper;
 
-import org.example.model.dto.RegistrationStudentDto;
-import org.example.model.dto.StudentDto;
-import org.example.model.dto.StudentInfoDto;
+import org.example.model.dto.database.RegistrationStudentDto;
+import org.example.model.dto.database.StudentDto;
+import org.example.model.dto.database.StudentInfoDto;
 import org.example.model.entity.QuestionnaireEntity;
 import org.example.model.entity.StudentEntity;
 import org.example.model.entity.StudentTestResultEntity;

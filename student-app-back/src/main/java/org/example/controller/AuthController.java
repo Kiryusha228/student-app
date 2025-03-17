@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.mapper.StudentMapper;
 import org.example.model.dto.auth.AuthenticationRequest;
 import org.example.model.dto.auth.AuthenticationResponse;
-import org.example.model.dto.RegistrationStudentDto;
+import org.example.model.dto.database.RegistrationStudentDto;
 import org.example.service.AuthService;
 import org.example.service.StudentService;
 import org.springframework.http.ResponseEntity;
