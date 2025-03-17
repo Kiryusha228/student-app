@@ -1,11 +1,10 @@
 package org.example.model.entity;
 
 import jakarta.persistence.*;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Entity
 @Table(name = "test")
@@ -13,17 +12,17 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class TestEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private Long id;
 
-    @Column(name = "question")
-    private String testQuestion;
+  @Column(name = "question")
+  private String testQuestion;
 
-    @Column(name = "answers")
-    private List<String> answers;
+  @Column(name = "answers")
+  private List<String> answers;
 
-    @Column(name = "right_answer")
-    private Integer rightAnswer;
+  @Column(name = "right_answer")
+  private Integer rightAnswer;
 }

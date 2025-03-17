@@ -6,5 +6,5 @@ import lombok.*;
 @AllArgsConstructor
 @Data
 public class StudentTestResultDto {
-    private Integer testResult;
+  private Integer testResult;
 }

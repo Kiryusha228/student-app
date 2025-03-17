@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CompletionOptions {
-    boolean stream;
-    double temperature;
-    int maxTokens;
+  boolean stream;
+  double temperature;
+  int maxTokens;
 }

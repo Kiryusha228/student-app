@@ -18,7 +18,7 @@ public class HrController {
   @PostMapping("/add")
   public void addHr(Long telegramChatId) {
     throw new StudentNotFoundException("fuckoff");
-    //hrService.createHr(telegramChatId);
+    // hrService.createHr(telegramChatId);
   }
 
   @DeleteMapping("/delete")

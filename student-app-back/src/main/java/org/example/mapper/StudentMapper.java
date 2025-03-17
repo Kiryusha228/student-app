@@ -25,16 +25,16 @@ public class StudentMapper {
   }
 
   public StudentInfoDto toStudentInfoDto(
-          StudentEntity studentEntity,
-          QuestionnaireEntity questionnaireEntity,
-          StudentTestResultEntity studentTestResultEntity){
+      StudentEntity studentEntity,
+      QuestionnaireEntity questionnaireEntity,
+      StudentTestResultEntity studentTestResultEntity) {
     return new StudentInfoDto(
-            studentEntity.getName(),
-            studentTestResultEntity.getTestResult(),
-            questionnaireEntity.getExperience(),
-            questionnaireEntity.getLanguageProficiency(),
-            questionnaireEntity.getLanguageExperience(),
-            questionnaireEntity.getTelegram(),
-            questionnaireEntity.getRole());
+        studentEntity.getName(),
+        studentTestResultEntity.getTestResult(),
+        questionnaireEntity.getExperience(),
+        questionnaireEntity.getLanguageProficiency(),
+        questionnaireEntity.getLanguageExperience(),
+        questionnaireEntity.getTelegram(),
+        questionnaireEntity.getRole());
   }
 }
