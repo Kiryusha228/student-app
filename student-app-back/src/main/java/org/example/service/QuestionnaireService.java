@@ -1,6 +1,6 @@
 package org.example.service;
 
-import org.example.model.dto.QuestionnaireDto;
+import org.example.model.dto.database.QuestionnaireDto;
 
 public interface QuestionnaireService {
 

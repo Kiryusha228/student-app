@@ -1,6 +1,6 @@
 package org.example.mapper;
 
-import org.example.model.dto.StudentTestResultDto;
+import org.example.model.dto.database.StudentTestResultDto;
 import org.example.model.entity.StudentEntity;
 import org.example.model.entity.StudentTestResultEntity;
 import org.springframework.stereotype.Component;

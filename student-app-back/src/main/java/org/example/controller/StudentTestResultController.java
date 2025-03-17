@@ -1,7 +1,7 @@
 package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.model.dto.StudentTestResultDto;
+import org.example.model.dto.database.StudentTestResultDto;
 import org.example.service.StudentTestResultService;
 import org.springframework.web.bind.annotation.*;
 

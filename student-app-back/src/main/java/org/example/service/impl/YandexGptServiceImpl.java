@@ -2,7 +2,8 @@ package org.example.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.github.cdimascio.dotenv.Dotenv;
-import org.example.model.dto.StudentInfoDto;
+import lombok.RequiredArgsConstructor;
+import org.example.model.dto.database.StudentInfoDto;
 import org.example.model.dto.yandexgpt.Message;
 import org.example.model.dto.yandexgpt.request.CompletionOptions;
 import org.example.model.dto.yandexgpt.response.YandexGptResponse;
@@ -15,14 +16,19 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
 import reactor.core.publisher.Mono;
+
 import java.util.List;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 @Service
+@RequiredArgsConstructor
 public class YandexGptServiceImpl implements YandexGptService {
 
-    private static final Dotenv dotenv = Dotenv.configure().load();
+    private final WebClient webClient;
+
+    private final Dotenv dotenv;
 
     private static final String gptCommand = "Ты — помощник, который решает задачи по распределению студентов на команды. Тебе будет предоставлен JSON со списком студентов, где для каждого студента указаны следующие параметры:\n" +
             "- `studentName`: Имя студента.\n" +
@@ -67,30 +73,6 @@ public class YandexGptServiceImpl implements YandexGptService {
             "}\n" +
             "Нужны только данные без вводных фраз и объяснений. Не используй разметку Markdown!";
 
-    @Override
-    public YandexGptResponse apiTest() {
-
-        var apiUrl = dotenv.get("YANDEX_API_URL");
-        var apiKey = dotenv.get("YANDEX_API_KEY");
-        var folderId = dotenv.get("YANDEX_FOLDER_ID");
-
-        WebClient webClient = WebClient.builder()
-                .baseUrl(apiUrl)
-                .defaultHeader(HttpHeaders.AUTHORIZATION, "Api-Key " + apiKey)
-                .defaultHeader("x-folder-id", folderId)
-                .build();
-
-
-        YandexGptRequest request = getYandexGptTestRequest(folderId);
-
-        Mono<YandexGptResponse> responseMono = webClient.post()
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(request)
-                .retrieve()
-                .bodyToMono(YandexGptResponse.class);
-
-        return responseMono.block();
-    }
 
     private static YandexGptRequest getYandexGptTestRequest(String folderId) {
         var completionOptions = new CompletionOptions(false, 0.6, 2000);
@@ -108,7 +90,7 @@ public class YandexGptServiceImpl implements YandexGptService {
                         "без вводных фраз и объяснений. Не используй разметку Markdown!");
 
         return new YandexGptRequest(
-                "gpt://"+ folderId +"/yandexgpt-lite/latest",
+                "gpt://" + folderId + "/yandexgpt-lite/latest",
                 completionOptions,
                 List.of(systemMessage, userMessage));
     }
@@ -120,20 +102,19 @@ public class YandexGptServiceImpl implements YandexGptService {
         var apiKey = dotenv.get("YANDEX_API_KEY");
         var folderId = dotenv.get("YANDEX_FOLDER_ID");
 
-        WebClient webClient = WebClient.builder()
-                .baseUrl(apiUrl)
-                .defaultHeader(HttpHeaders.AUTHORIZATION, "Api-Key " + apiKey)
-                .defaultHeader("x-folder-id", folderId)
-                .build();
         YandexGptRequest request = new YandexGptRequest();
         try {
-            request  = getYandexGptTeamRequest(folderId, students);
-        }
-        catch (JsonProcessingException ex){
+            request = getYandexGptTeamRequest(folderId, students);
+        } catch (JsonProcessingException ex) {
 
+            // todo: add logger
+            ex.printStackTrace();
         }
 
         Mono<YandexGptResponse> responseMono = webClient.post()
+                .uri(apiUrl)
+                .header(HttpHeaders.AUTHORIZATION, "Api-Key " + apiKey)
+                .header("x-folder-id", folderId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(request)
                 .retrieve()
@@ -157,7 +138,7 @@ public class YandexGptServiceImpl implements YandexGptService {
                 json);
 
         return new YandexGptRequest(
-                "gpt://"+ folderId +"/yandexgpt/latest",
+                "gpt://" + folderId + "/yandexgpt/latest",
                 completionOptions,
                 List.of(systemMessage, userMessage));
     }

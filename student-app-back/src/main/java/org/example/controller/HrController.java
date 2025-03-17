@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.exception.StudentNotFoundException;
 import org.example.service.HrService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +17,8 @@ public class HrController {
 
   @PostMapping("/add")
   public void addHr(Long telegramChatId) {
-    hrService.createHr(telegramChatId);
+    throw new StudentNotFoundException("fuckoff");
+    //hrService.createHr(telegramChatId);
   }
 
   @DeleteMapping("/delete")

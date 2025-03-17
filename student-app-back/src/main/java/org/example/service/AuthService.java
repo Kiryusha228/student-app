@@ -2,7 +2,7 @@ package org.example.service;
 
 import org.example.model.dto.auth.AuthenticationRequest;
 import org.example.model.dto.auth.AuthenticationResponse;
-import org.example.model.dto.RegistrationStudentDto;
+import org.example.model.dto.database.RegistrationStudentDto;
 
 public interface AuthService {
 

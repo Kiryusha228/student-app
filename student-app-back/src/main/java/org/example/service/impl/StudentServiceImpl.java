@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
-import org.example.mapper.QuestionnaireMapper;
+import org.example.exception.StudentNotFoundException;
 import org.example.mapper.StudentMapper;
-import org.example.mapper.StudentTestResultMapper;
-import org.example.model.dto.StudentInfoDto;
+import org.example.model.dto.database.StudentInfoDto;
 import org.example.model.entity.StudentEntity;
 import org.example.repository.QuestionnaireRepository;
 import org.example.repository.StudentRepository;
@@ -50,11 +49,11 @@ public class StudentServiceImpl implements StudentService {
     public StudentEntity getStudentById(String studentId) {
         var student = studentRepository.findById(studentId);
 
-        if (student.isPresent()) {
-            return student.get();
-        } else {
-            throw new NullPointerException();
+        if (student.isEmpty()) {
+            throw new StudentNotFoundException("Студент не найден");
         }
+
+        return student.get();
     }
 
     @Override
@@ -65,11 +64,12 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void updateStudent(StudentEntity newStudentEntity) {
         var student = studentRepository.findById(newStudentEntity.getId());
-        if (student.isPresent()) {
-            studentRepository.save(newStudentEntity);
-        } else {
-            throw new NullPointerException();
+
+        if (student.isEmpty()) {
+            throw new StudentNotFoundException("Студент не найден");
         }
+
+        studentRepository.save(newStudentEntity);
     }
 
     @Override

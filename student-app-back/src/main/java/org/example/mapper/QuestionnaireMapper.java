@@ -1,6 +1,6 @@
 package org.example.mapper;
 
-import org.example.model.dto.QuestionnaireDto;
+import org.example.model.dto.database.QuestionnaireDto;
 import org.example.model.entity.QuestionnaireEntity;
 import org.example.model.entity.StudentEntity;
 import org.springframework.stereotype.Component;
