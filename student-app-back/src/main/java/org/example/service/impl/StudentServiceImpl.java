@@ -1,11 +1,8 @@
 package org.example.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.example.exception.StudentNotFoundException;
 import org.example.mapper.StudentMapper;
-import org.example.model.dto.database.StudentInfoDto;
 import org.example.model.entity.StudentEntity;
 import org.example.repository.QuestionnaireRepository;
 import org.example.repository.StudentRepository;
@@ -22,24 +19,6 @@ public class StudentServiceImpl implements StudentService {
   private final QuestionnaireRepository questionnaireRepository;
 
   private final StudentMapper studentMapper;
-
-  @Override
-  public List<StudentInfoDto> getAllStudents() {
-    var students = studentRepository.findAll().stream().toList();
-
-    var allStudentsInfo = new ArrayList<StudentInfoDto>();
-
-    for (StudentEntity student : students) {
-      var testResult = studentTestResultRepository.findByStudent(student);
-      var questionnaire = questionnaireRepository.findByStudent(student);
-      if (testResult.isPresent() && questionnaire.isPresent()) {
-        allStudentsInfo.add(
-            studentMapper.toStudentInfoDto(student, questionnaire.get(), testResult.get()));
-      }
-    }
-
-    return allStudentsInfo;
-  }
 
   @Override
   public StudentEntity getStudentById(String studentId) {

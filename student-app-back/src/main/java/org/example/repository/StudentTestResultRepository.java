@@ -1,7 +1,7 @@
 package org.example.repository;
 
 import java.util.Optional;
-import org.example.model.entity.StudentEntity;
+import org.example.model.entity.StudentProjectWorkshopEntity;
 import org.example.model.entity.StudentTestResultEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -10,5 +10,6 @@ public interface StudentTestResultRepository extends JpaRepository<StudentTestRe
   @Override
   Optional<StudentTestResultEntity> findById(Long id);
 
-  Optional<StudentTestResultEntity> findByStudent(StudentEntity student);
+  Optional<StudentTestResultEntity> findByStudentProjectWorkshop(
+      StudentProjectWorkshopEntity studentProjectWorkshop);
 }

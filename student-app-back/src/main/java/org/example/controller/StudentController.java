@@ -1,11 +1,9 @@
 package org.example.controller;
 
 import java.security.Principal;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.example.mapper.StudentMapper;
 import org.example.model.dto.database.StudentDto;
-import org.example.model.dto.database.StudentInfoDto;
 import org.example.model.entity.StudentEntity;
 import org.example.service.StudentService;
 import org.springframework.web.bind.annotation.*;
@@ -38,10 +36,5 @@ public class StudentController {
   @DeleteMapping("/delete")
   public void deleteStudent(Principal principal) {
     studentService.deleteStudent(principal.getName());
-  }
-
-  @GetMapping
-  public List<StudentInfoDto> getAllStudents() {
-    return studentService.getAllStudents();
   }
 }

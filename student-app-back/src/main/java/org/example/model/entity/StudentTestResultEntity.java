@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "user_test_result")
+@Table(name = "student_test_result")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -18,6 +18,6 @@ public class StudentTestResultEntity {
   private Integer testResult;
 
   @OneToOne
-  @JoinColumn(name = "student_id")
-  private StudentEntity student;
+  @JoinColumn(name = "studentTestResult")
+  private StudentProjectWorkshopEntity studentProjectWorkshop;
 }

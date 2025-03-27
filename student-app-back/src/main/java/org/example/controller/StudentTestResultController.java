@@ -22,9 +22,4 @@ public class StudentTestResultController {
   public StudentTestResultDto getTest(Principal principal) {
     return testService.getTestResult(principal.getName());
   }
-
-  @DeleteMapping("/delete")
-  public void deleteQuestionnaire(Principal principal) {
-    testService.deleteTestResult(principal.getName());
-  }
 }

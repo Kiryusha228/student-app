@@ -70,26 +70,6 @@ public class YandexGptServiceImpl implements YandexGptService {
           + "}\n"
           + "Нужны только данные без вводных фраз и объяснений. Не используй разметку Markdown!";
 
-  private static YandexGptRequest getYandexGptTestRequest(String folderId) {
-    var completionOptions = new CompletionOptions(false, 0.6, 2000);
-
-    var systemMessage = new Message("system", "Ты — умный ассистент.");
-
-    var userMessage =
-        new Message(
-            "user",
-            "Назови любые три группы товаров в продовольственном магазине. "
-                + "Для каждой группы приведи три любые подгруппы, входящие в группу. Представь "
-                + "результат в форме объекта JSON, где каждая группа товаров представлена в виде ключа в "
-                + "объекте JSON, а значениями являются массивы из соответствующих подгрупп. Нужны только данные "
-                + "без вводных фраз и объяснений. Не используй разметку Markdown!");
-
-    return new YandexGptRequest(
-        "gpt://" + folderId + "/yandexgpt-lite/latest",
-        completionOptions,
-        List.of(systemMessage, userMessage));
-  }
-
   @Override
   public YandexGptResponse getTeams(List<StudentInfoDto> students) {
 

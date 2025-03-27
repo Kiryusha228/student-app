@@ -9,6 +9,4 @@ public interface QuestionnaireService {
   void createQuestionnaire(QuestionnaireDto questionnaireDto, String studentId);
 
   void updateQuestionnaire(QuestionnaireDto questionnaireDto, String studentId);
-
-  void deleteQuestionnaire(String studentId);
 }
