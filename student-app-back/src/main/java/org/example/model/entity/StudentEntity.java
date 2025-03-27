@@ -1,6 +1,7 @@
 package org.example.model.entity;
 
 import jakarta.persistence.*;
+import java.util.List;
 import lombok.*;
 
 @Entity
@@ -18,4 +19,7 @@ public class StudentEntity {
 
   @Column(name = "mail")
   private String mail;
+
+  @OneToMany(mappedBy = "student")
+  private List<StudentProjectWorkshopEntity> studentProjectWorkshop;
 }

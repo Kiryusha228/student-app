@@ -13,11 +13,11 @@ public class StudentMapper {
   public StudentEntity registrationStudentDtoToStudentEntity(
       RegistrationStudentDto registrationStudentDto, String id) {
     return new StudentEntity(
-        id, registrationStudentDto.getName(), registrationStudentDto.getMail());
+        id, registrationStudentDto.getName(), registrationStudentDto.getMail(), null);
   }
 
   public StudentEntity studentDtoToStudentEntity(StudentDto studentDto, String id) {
-    return new StudentEntity(id, studentDto.getName(), studentDto.getMail());
+    return new StudentEntity(id, studentDto.getName(), studentDto.getMail(), null);
   }
 
   public StudentDto studentEntityToStudentDto(StudentEntity studentEntity) {

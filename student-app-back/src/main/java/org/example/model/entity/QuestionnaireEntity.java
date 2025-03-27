@@ -42,6 +42,6 @@ public class QuestionnaireEntity {
   private String github;
 
   @OneToOne
-  @JoinColumn(name = "student_id")
-  private StudentEntity student;
+  @JoinColumn(name = "questionnaire")
+  private StudentProjectWorkshopEntity studentProjectWorkshop;
 }

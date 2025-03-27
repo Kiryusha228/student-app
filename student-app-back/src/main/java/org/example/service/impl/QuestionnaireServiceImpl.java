@@ -1,5 +1,6 @@
 package org.example.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.exception.QuestionnaireNotFoundException;
 import org.example.exception.StudentNotFoundException;
@@ -13,9 +14,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class QuestionnaireServiceImpl implements QuestionnaireService {
-
-  private final QuestionnaireRepository questionnaireRepository;
   private final StudentRepository studentRepository;
+  private final QuestionnaireRepository questionnaireRepository;
   private final QuestionnaireMapper questionnaireMapper;
 
   @Override
@@ -26,16 +26,20 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
       throw new StudentNotFoundException("Студент не найден");
     }
 
-    var questionnaire = questionnaireRepository.findByStudent(student.get());
+    var studentProjectWorkshops = student.get().getStudentProjectWorkshop();
+    var lastStudentProjectWorkshop =
+        studentProjectWorkshops.get(studentProjectWorkshops.size() - 1);
+    var questionnaire = lastStudentProjectWorkshop.getQuestionnaire();
 
-    if (questionnaire.isEmpty()) {
-      throw new QuestionnaireNotFoundException("У данного студента не заполнена анкета");
+    if (questionnaire == null) {
+      throw new QuestionnaireNotFoundException("У студента не заполнена анекта");
     }
 
-    return questionnaireMapper.questionnaireEntityToQuestionnaireDto(questionnaire.get());
+    return questionnaireMapper.toQuestionnaireDto(questionnaire);
   }
 
   @Override
+  @Transactional
   public void createQuestionnaire(QuestionnaireDto questionnaireDto, String studentId) {
     var student = studentRepository.findById(studentId);
 
@@ -43,12 +47,20 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
       throw new StudentNotFoundException("Студент не найден");
     }
 
-    questionnaireRepository.save(
-        questionnaireMapper.questionnaireDtoToQuestionnaireEntity(
-            questionnaireDto, student.get(), 0L));
+    var studentProjectWorkshops = student.get().getStudentProjectWorkshop();
+    var lastStudentProjectWorkshop =
+        studentProjectWorkshops.get(studentProjectWorkshops.size() - 1);
+
+    var savedQuestionnaire =
+        questionnaireRepository.save(
+            questionnaireMapper.toQuestionnaireEntity(
+                questionnaireDto, lastStudentProjectWorkshop, 0L));
+
+    lastStudentProjectWorkshop.setQuestionnaire(savedQuestionnaire);
   }
 
   @Override
+  @Transactional
   public void updateQuestionnaire(QuestionnaireDto questionnaireDto, String studentId) {
     var student = studentRepository.findById(studentId);
 
@@ -56,31 +68,23 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
       throw new StudentNotFoundException("Студент не найден");
     }
 
-    var questionnaire = questionnaireRepository.findByStudent(student.get());
+    var studentProjectWorkshops = student.get().getStudentProjectWorkshop();
+    var lastStudentProjectWorkshop =
+        studentProjectWorkshops.get(studentProjectWorkshops.size() - 1);
+
+    var questionnaire = questionnaireRepository.findByStudentProjectWorkshop(lastStudentProjectWorkshop);
 
     if (questionnaire.isEmpty()) {
-      throw new QuestionnaireNotFoundException("У данного студента не заполнена анкета");
+      throw new QuestionnaireNotFoundException("У студента не заполнена анекта");
     }
 
-    questionnaireRepository.save(
-        questionnaireMapper.questionnaireDtoToQuestionnaireEntity(
-            questionnaireDto, student.get(), questionnaire.get().getId()));
-  }
+    var savedQuestionnaire =
+        questionnaireRepository.save(
+            questionnaireMapper.toQuestionnaireEntity(
+                questionnaireDto,
+                lastStudentProjectWorkshop,
+                lastStudentProjectWorkshop.getQuestionnaire().getId()));
 
-  @Override
-  public void deleteQuestionnaire(String studentId) {
-    var student = studentRepository.findById(studentId);
-
-    if (student.isEmpty()) {
-      throw new StudentNotFoundException("Студент не найден");
-    }
-
-    var questionnaire = questionnaireRepository.findByStudent(student.get());
-
-    if (questionnaire.isEmpty()) {
-      throw new QuestionnaireNotFoundException("У данного студента не заполнена анкета");
-    }
-
-    questionnaireRepository.delete(questionnaire.get());
+    lastStudentProjectWorkshop.setQuestionnaire(savedQuestionnaire);
   }
 }
