@@ -1,14 +1,12 @@
 package org.example.service;
 
-import org.example.model.dto.QuestionnaireDto;
+import org.example.model.dto.database.QuestionnaireDto;
 
 public interface QuestionnaireService {
 
-    QuestionnaireDto getQuestionnaireById(Long questionnaireId);
+  QuestionnaireDto getQuestionnaireByStudentId(String studentId);
 
-    void createQuestionnaire(QuestionnaireDto questionnaireDto);
+  void createQuestionnaire(QuestionnaireDto questionnaireDto, String studentId);
 
-    void updateQuestionnaire(QuestionnaireDto questionnaireDto);
-
-    void deleteQuestionnaire(Long questionnaireId);
+  void updateQuestionnaire(QuestionnaireDto questionnaireDto, String studentId);
 }

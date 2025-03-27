@@ -1,52 +1,54 @@
 package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.example.exception.StudentNotFoundException;
+import org.example.mapper.StudentMapper;
 import org.example.model.entity.StudentEntity;
+import org.example.repository.QuestionnaireRepository;
 import org.example.repository.StudentRepository;
+import org.example.repository.StudentTestResultRepository;
 import org.example.service.StudentService;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
 
-    private final StudentRepository studentRepository;
+  private final StudentRepository studentRepository;
+  private final StudentTestResultRepository studentTestResultRepository;
+  private final QuestionnaireRepository questionnaireRepository;
 
-    @Override
-    public List<StudentEntity> getAllStudents() {
-        return studentRepository.findAll().stream().toList();
+  private final StudentMapper studentMapper;
+
+  @Override
+  public StudentEntity getStudentById(String studentId) {
+    var student = studentRepository.findById(studentId);
+
+    if (student.isEmpty()) {
+      throw new StudentNotFoundException("Студент не найден");
     }
 
-    @Override
-    public StudentEntity getStudentById(Long studentId) {
-        var student = studentRepository.findById(studentId);
+    return student.get();
+  }
 
-         if (student.isPresent()) {
-            return student.get();
-        } else {
-            throw new NullPointerException();
-        }
+  @Override
+  public void createStudent(StudentEntity studentEntity) {
+    studentRepository.save(studentEntity);
+  }
+
+  @Override
+  public void updateStudent(StudentEntity newStudentEntity) {
+    var student = studentRepository.findById(newStudentEntity.getId());
+
+    if (student.isEmpty()) {
+      throw new StudentNotFoundException("Студент не найден");
     }
 
-    @Override
-    public void createStudent(StudentEntity studentEntity) {
-        studentRepository.save(studentEntity);
-    }
+    studentRepository.save(newStudentEntity);
+  }
 
-    @Override
-    public void updateStudent(StudentEntity newStudentEntity) {
-        var student = studentRepository.findById(newStudentEntity.getId());
-        if (student.isPresent()){
-            studentRepository.save(newStudentEntity);
-        } else {
-            throw new NullPointerException();
-        }
-    }
-
-    @Override
-    public void deleteStudent(Long studentId) {
-        studentRepository.deleteById(studentId);
-    }
+  @Override
+  public void deleteStudent(String studentId) {
+    studentRepository.deleteById(studentId);
+  }
 }

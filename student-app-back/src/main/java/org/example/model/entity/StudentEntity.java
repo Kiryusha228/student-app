@@ -1,5 +1,7 @@
 package org.example.model.entity;
+
 import jakarta.persistence.*;
+import java.util.List;
 import lombok.*;
 
 @Entity
@@ -8,17 +10,16 @@ import lombok.*;
 @NoArgsConstructor
 @Data
 public class StudentEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+  @Id
+  @Column(name = "id")
+  private String id;
 
-    @Column(name = "name")
-    private String name;
+  @Column(name = "name")
+  private String name;
 
-    @Column(name = "password")
-    private String password;
+  @Column(name = "mail")
+  private String mail;
 
-    @Column(name = "mail")
-    private String mail;
+  @OneToMany(mappedBy = "student")
+  private List<StudentProjectWorkshopEntity> studentProjectWorkshop;
 }

@@ -1,46 +1,51 @@
 package org.example.service.impl;
 
+import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
-import org.example.mapper.TestMapper;
-import org.example.model.dto.TestDto;
-import org.example.repository.StudentRepository;
+import org.example.exception.TestNotFoundException;
+import org.example.model.entity.TestEntity;
 import org.example.repository.TestRepository;
 import org.example.service.TestService;
 import org.springframework.stereotype.Service;
-
 
 @Service
 @RequiredArgsConstructor
 public class TestServiceImpl implements TestService {
 
-    private final TestRepository testRepository;
-    private final StudentRepository studentRepository;
-    private final TestMapper testMapper;
+  private final TestRepository testRepository;
 
-    @Override
-    public TestDto getTestById(Long testId) {
-        var test = testRepository.findById(testId);
-        if (test.isPresent()){
-            return testMapper.testEntityToTestDto(test.get());
-        }
-        else {
-            throw new NullPointerException();
-        }
+  @Override
+  public void createTest(List<TestEntity> test) {
+    testRepository.saveAll(test);
+  }
+
+  @Override
+  public List<TestEntity> getTest() {
+    return testRepository.findAll();
+  }
+
+  @Override
+  public int checkAnswers(List<Integer> answers) {
+    var test = testRepository.findAll();
+
+    if (test.isEmpty()) {
+      throw new TestNotFoundException("Тестовых вопросов нет");
     }
 
-    @Override
-    public void createTest(TestDto testDto) {
-        var student = studentRepository.findById(testDto.getStudentId());
-        if (student.isPresent()){
-            testRepository.save(testMapper.testDtoToTestEntity(testDto, student.get()));
-        }
-        else {
-            throw new NullPointerException();
-        }
+    var testResult = 0;
+
+    for (int i = 0; i < test.size(); i++) {
+      if (Objects.equals(test.get(i).getRightAnswer(), answers.get(i))) {
+        testResult++;
+      }
     }
 
-    @Override
-    public void deleteTest(Long testId) {
-        testRepository.deleteById(testId);
-    }
+    return testResult;
+  }
+
+  @Override
+  public void deleteTest() {
+    testRepository.deleteAll();
+  }
 }

@@ -1,7 +1,10 @@
 package org.example.model.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "test")
@@ -9,18 +12,17 @@ import lombok.*;
 @NoArgsConstructor
 @Data
 public class TestEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private Long id;
 
-    @Column(name = "test_result")
-    private Integer testResult;
+  @Column(name = "question")
+  private String testQuestion;
 
-    @Column(name = "contest_result")
-    private Integer contestResult;
+  @Column(name = "answers")
+  private List<String> answers;
 
-    @OneToOne
-    @JoinColumn(name = "student_id")
-    private StudentEntity student;
+  @Column(name = "right_answer")
+  private Integer rightAnswer;
 }
