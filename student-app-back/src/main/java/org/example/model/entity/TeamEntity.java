@@ -17,6 +17,6 @@ public class TeamEntity {
   @Column(name = "id")
   private Long id;
 
-  @Column(name = "students")
-  private List<String> students;
+  @OneToMany(mappedBy = "team")
+  private List<StudentProjectWorkshopEntity> studentProjectWorkshop;
 }

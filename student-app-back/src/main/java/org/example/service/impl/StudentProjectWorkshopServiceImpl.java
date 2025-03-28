@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.example.exception.ProjectWorkshopNotFoundException;
 import org.example.exception.StudentNotFoundException;
+import org.example.exception.StudentProjectWorkshopNotFoundException;
 import org.example.mapper.StudentProjectWorkshopMapper;
 import org.example.model.dto.database.StudentInfoDto;
 import org.example.model.entity.QuestionnaireEntity;
@@ -46,6 +47,15 @@ public class StudentProjectWorkshopServiceImpl implements StudentProjectWorkshop
   }
 
   @Override
+  public StudentProjectWorkshopEntity getStudentProjectWorkshopById(Long studentProjectWorkshopId) {
+    var studentProjectWorkshop = studentProjectWorkshopRepository.findById(studentProjectWorkshopId);
+    if (studentProjectWorkshop.isEmpty()) {
+      throw new StudentProjectWorkshopNotFoundException("Такого студента в мастерской нет");
+    }
+    return studentProjectWorkshop.get();
+  }
+
+  @Override
   public void setTestResult(
       StudentProjectWorkshopEntity studentProjectWorkshop, StudentTestResultEntity testResult) {
     studentProjectWorkshop.setStudentTestResult(testResult);
@@ -75,7 +85,7 @@ public class StudentProjectWorkshopServiceImpl implements StudentProjectWorkshop
     }
 
     var studentProjectWorkshop =
-        new StudentProjectWorkshopEntity(0L, student.get(), projectWorkshop.get(), null, null);
+        new StudentProjectWorkshopEntity(0L, student.get(), projectWorkshop.get(), null, null, null);
 
     var savedStudentProjectWorkshop = studentProjectWorkshopRepository.save(studentProjectWorkshop);
     projectWorkshopService.addStudent(projectWorkshopId, savedStudentProjectWorkshop);

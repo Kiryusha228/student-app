@@ -15,6 +15,7 @@ import org.example.model.dto.yandexgpt.Message;
 import org.example.model.dto.yandexgpt.request.CompletionOptions;
 import org.example.model.dto.yandexgpt.request.YandexGptRequest;
 import org.example.model.dto.yandexgpt.response.YandexGptResponse;
+import org.example.service.TeamService;
 import org.example.service.YandexGptService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -31,6 +32,8 @@ public class YandexGptServiceImpl implements YandexGptService {
   private final Dotenv dotenv;
 
   private final ObjectMapper objectMapper;
+
+  private final TeamService teamService;
 
   private static final String gptCommand =
       "Ты — помощник, который решает задачи по распределению студентов на команды. Тебе будет предоставлен JSON со списком студентов, где для каждого студента указаны следующие параметры:\n"
@@ -56,11 +59,11 @@ public class YandexGptServiceImpl implements YandexGptService {
           + "{\n"
           + "  \"teams\": [\n"
           + "    {\n"
-          + "      \"id\": \"1\",\n"
+          //+ "      \"id\": \"1\",\n"
           + "      \"students\": [ id студента 1, id студента 2, … ]\n"
           + "    },\n"
           + "    {\n"
-          + "      \"id\": \"2\",\n"
+         // + "      \"id\": \"2\",\n"
           + "      \"students\": [ id студента 1, id студента 2, … ]\n"
           + "      ]\n"
           + "    },\n"
@@ -118,6 +121,8 @@ public class YandexGptServiceImpl implements YandexGptService {
     catch (IOException exception) {
       exception.printStackTrace();
     }
+
+    teamService.createTeams(teams);
 
     return teams;
   }
