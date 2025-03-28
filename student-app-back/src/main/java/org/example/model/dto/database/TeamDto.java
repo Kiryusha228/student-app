@@ -1,15 +1,15 @@
 package org.example.model.dto.database;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.model.entity.TeamEntity;
 
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TeamListDto {
-    private List<TeamDto> teams;
+public class TeamDto {
+    private List<Long> students;
 }
