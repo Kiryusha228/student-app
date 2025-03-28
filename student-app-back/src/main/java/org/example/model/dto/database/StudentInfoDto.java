@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class StudentInfoDto {
-  String studentName;
+  Long studentProjectWorkshopId;
   Integer testResult;
   private String experience;
   private String languageProficiency;

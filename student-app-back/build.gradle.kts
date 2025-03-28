@@ -32,6 +32,10 @@ dependencies {
 
     implementation("io.github.cdimascio:dotenv-java:2.3.2")
 
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.18.3")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.18.3")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.3")
+
 }
 
 spotless {

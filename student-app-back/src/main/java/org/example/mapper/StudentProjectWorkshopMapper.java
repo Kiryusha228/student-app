@@ -9,7 +9,7 @@ public class StudentProjectWorkshopMapper {
   public StudentInfoDto toStudentInfoDto(
       StudentProjectWorkshopEntity studentProjectWorkshopEntity) {
     return new StudentInfoDto(
-        studentProjectWorkshopEntity.getStudent().getName(),
+        studentProjectWorkshopEntity.getId(),
         studentProjectWorkshopEntity.getStudentTestResult().getTestResult(),
         studentProjectWorkshopEntity.getQuestionnaire().getExperience(),
         studentProjectWorkshopEntity.getQuestionnaire().getLanguageProficiency(),
