@@ -10,5 +10,6 @@ public interface QuestionnaireRepository extends JpaRepository<QuestionnaireEnti
   @Override
   Optional<QuestionnaireEntity> findById(Long id);
 
-  Optional<QuestionnaireEntity> findByStudentProjectWorkshop(StudentProjectWorkshopEntity studentProjectWorkshop);
+  Optional<QuestionnaireEntity> findByStudentProjectWorkshop(
+      StudentProjectWorkshopEntity studentProjectWorkshop);
 }

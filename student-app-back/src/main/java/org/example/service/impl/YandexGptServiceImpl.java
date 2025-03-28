@@ -4,9 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import io.github.cdimascio.dotenv.Dotenv;
+
+import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.example.exception.YandexGptResponseNotFoundException;
 import org.example.model.dto.database.StudentInfoDto;
+import org.example.model.dto.database.TeamListDto;
 import org.example.model.dto.yandexgpt.Message;
 import org.example.model.dto.yandexgpt.request.CompletionOptions;
 import org.example.model.dto.yandexgpt.request.YandexGptRequest;
@@ -26,9 +30,11 @@ public class YandexGptServiceImpl implements YandexGptService {
 
   private final Dotenv dotenv;
 
+  private final ObjectMapper objectMapper;
+
   private static final String gptCommand =
       "Ты — помощник, который решает задачи по распределению студентов на команды. Тебе будет предоставлен JSON со списком студентов, где для каждого студента указаны следующие параметры:\n"
-          + "- `studentName`: Имя студента.\n"
+          + "- `studentProjectWorkshopId`: Id студента.\n"
           + "- `testResult`: Числовое значение результата теста (от 0 до 100).\n"
           + "- `experience`: Описание опыта работы или обучения.\n"
           + "- `languageProficiency`: Уровень владения языками программирования.\n"
@@ -47,31 +53,25 @@ public class YandexGptServiceImpl implements YandexGptService {
           + "4. Все студенты должны быть распределены по командам без исключения. В ответе должно быть столько же студентов, сколько и во входных данных, и каждый студент должен встречаться только один раз.\n"
           + "\n"
           + "Ответ должен быть представлен в виде JSON следующего формата:\n"
-          + "\n"
           + "{\n"
           + "  \"teams\": [\n"
           + "    {\n"
-          + "      \"teamName\": \"Команда 1\",\n"
-          + "      \"members\": [\n"
-          + "        {\"name\": \"Имя студента 1\", \"telegram\": \"Telegram-ник студента 1\"},\n"
-          + "        {\"name\": \"Имя студента 2\", \"telegram\": \"Telegram-ник студента 2\"},\n"
-          + "        ...\n"
-          + "      ]\n"
+          + "      \"id\": \"1\",\n"
+          + "      \"students\": [ id студента 1, id студента 2, … ]\n"
           + "    },\n"
           + "    {\n"
-          + "      \"teamName\": \"Команда 2\",\n"
-          + "      \"members\": [\n"
-          + "        {\"name\": \"Имя студента 3\", \"telegram\": \"Telegram-ник студента 3\"},\n"
-          + "        {\"name\": \"Имя студента 4\", \"telegram\": \"Telegram-ник студента 4\"},\n"
-          + "        ...\n"
+          + "      \"id\": \"2\",\n"
+          + "      \"students\": [ id студента 1, id студента 2, … ]\n"
           + "      ]\n"
           + "    },\n"
+          + "    ...\n"
           + "  ]\n"
-          + "}\n"
+          + "}"
+          + "\n"
           + "Нужны только данные без вводных фраз и объяснений. Не используй разметку Markdown!";
 
   @Override
-  public YandexGptResponse getTeams(List<StudentInfoDto> students) {
+  public TeamListDto getTeams(List<StudentInfoDto> students) {
 
     var apiUrl = dotenv.get("YANDEX_API_URL");
     var apiKey = dotenv.get("YANDEX_API_KEY");
@@ -97,7 +97,29 @@ public class YandexGptServiceImpl implements YandexGptService {
             .retrieve()
             .bodyToMono(YandexGptResponse.class);
 
-    return responseMono.block();
+    var createdTeams = responseMono.block();
+
+    if (createdTeams == null) {
+      throw new YandexGptResponseNotFoundException("Произошла ошибка при получении ответа от YandexGpt");
+    }
+
+    var resultStringJson = createdTeams
+            .getResult()
+            .getAlternatives()
+            .get(0)
+            .getMessage()
+            .getText()
+            .replaceAll("`", "");
+
+    var teams = new TeamListDto();
+    try {
+      teams = objectMapper.reader().readValue(resultStringJson, TeamListDto.class);
+    }
+    catch (IOException exception) {
+      exception.printStackTrace();
+    }
+
+    return teams;
   }
 
   private static YandexGptRequest getYandexGptTeamRequest(

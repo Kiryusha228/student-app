@@ -23,18 +23,4 @@ public class StudentMapper {
   public StudentDto studentEntityToStudentDto(StudentEntity studentEntity) {
     return new StudentDto(studentEntity.getName(), studentEntity.getMail());
   }
-
-  public StudentInfoDto toStudentInfoDto(
-      StudentEntity studentEntity,
-      QuestionnaireEntity questionnaireEntity,
-      StudentTestResultEntity studentTestResultEntity) {
-    return new StudentInfoDto(
-        studentEntity.getName(),
-        studentTestResultEntity.getTestResult(),
-        questionnaireEntity.getExperience(),
-        questionnaireEntity.getLanguageProficiency(),
-        questionnaireEntity.getLanguageExperience(),
-        questionnaireEntity.getTelegram(),
-        questionnaireEntity.getRole());
-  }
 }

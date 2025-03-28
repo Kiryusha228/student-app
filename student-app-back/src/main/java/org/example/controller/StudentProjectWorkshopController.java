@@ -2,7 +2,6 @@ package org.example.controller;
 
 import java.security.Principal;
 import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import org.example.model.dto.database.StudentInfoDto;
 import org.example.service.StudentProjectWorkshopService;
