@@ -1,6 +1,8 @@
 package org.example.service;
 
 import java.util.List;
+
+import org.example.model.dto.database.StudentInTeamDto;
 import org.example.model.dto.database.StudentInfoDto;
 import org.example.model.entity.QuestionnaireEntity;
 import org.example.model.entity.StudentEntity;
@@ -19,4 +21,6 @@ public interface StudentProjectWorkshopService {
       StudentProjectWorkshopEntity studentProjectWorkshop, QuestionnaireEntity questionnaire);
 
   void createStudentProjectWorkshop(String studentId);
+
+  List<StudentInTeamDto> getTeam(String studentId);
 }

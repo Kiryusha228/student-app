@@ -32,6 +32,6 @@ public class StudentProjectWorkshopEntity {
   private StudentTestResultEntity studentTestResult;
 
   @ManyToOne
-  @JoinColumn(name = "team_id", nullable = false)
+  @JoinColumn(name = "team_id")
   private TeamEntity team;
 }

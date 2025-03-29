@@ -15,6 +15,7 @@ import org.example.model.dto.yandexgpt.Message;
 import org.example.model.dto.yandexgpt.request.CompletionOptions;
 import org.example.model.dto.yandexgpt.request.YandexGptRequest;
 import org.example.model.dto.yandexgpt.response.YandexGptResponse;
+import org.example.service.StudentProjectWorkshopService;
 import org.example.service.TeamService;
 import org.example.service.YandexGptService;
 import org.springframework.http.HttpHeaders;
@@ -34,6 +35,7 @@ public class YandexGptServiceImpl implements YandexGptService {
   private final ObjectMapper objectMapper;
 
   private final TeamService teamService;
+  private final StudentProjectWorkshopService studentProjectWorkshopService;
 
   private static final String gptCommand =
       "Ты — помощник, который решает задачи по распределению студентов на команды. Тебе будет предоставлен JSON со списком студентов, где для каждого студента указаны следующие параметры:\n"
@@ -59,11 +61,9 @@ public class YandexGptServiceImpl implements YandexGptService {
           + "{\n"
           + "  \"teams\": [\n"
           + "    {\n"
-          //+ "      \"id\": \"1\",\n"
           + "      \"students\": [ id студента 1, id студента 2, … ]\n"
           + "    },\n"
           + "    {\n"
-         // + "      \"id\": \"2\",\n"
           + "      \"students\": [ id студента 1, id студента 2, … ]\n"
           + "      ]\n"
           + "    },\n"
@@ -74,7 +74,9 @@ public class YandexGptServiceImpl implements YandexGptService {
           + "Нужны только данные без вводных фраз и объяснений. Не используй разметку Markdown!";
 
   @Override
-  public TeamListDto getTeams(List<StudentInfoDto> students) {
+  public TeamListDto getTeams(List<StudentInfoDto> students1) {
+
+    var students = studentProjectWorkshopService.getAllStudents();
 
     var apiUrl = dotenv.get("YANDEX_API_URL");
     var apiKey = dotenv.get("YANDEX_API_KEY");
@@ -113,6 +115,8 @@ public class YandexGptServiceImpl implements YandexGptService {
             .getMessage()
             .getText()
             .replaceAll("`", "");
+
+    System.out.println(resultStringJson);
 
     var teams = new TeamListDto();
     try {
