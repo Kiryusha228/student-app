@@ -27,7 +27,7 @@ public class StudentProjectWorkshopController {
     return studentProjectWorkshopService.getAllStudents();
   }
 
-  @GetMapping("/info")
+  @GetMapping("/team")
   public List<StudentInTeamDto> getTeam(Principal principal) {
     return studentProjectWorkshopService.getTeam(principal.getName());
   }

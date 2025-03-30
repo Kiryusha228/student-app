@@ -25,4 +25,7 @@ public class ProjectWorkshopEntity {
 
   @OneToMany(mappedBy = "projectWorkshop")
   private List<StudentProjectWorkshopEntity> studentProjectWorkshop;
+
+  @OneToMany(mappedBy = "projectWorkshop")
+  private List<TeamEntity> teams;
 }
