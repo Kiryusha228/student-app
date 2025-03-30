@@ -9,6 +9,6 @@ public class ProjectWorkshopMapper {
   public ProjectWorkshopEntity toProjectWorkshopEntity(
       CreateProjectWorkshopDto createProjectWorkshopDto) {
     return new ProjectWorkshopEntity(
-        0L, createProjectWorkshopDto.getName(), createProjectWorkshopDto.getYear(), null);
+        0L, createProjectWorkshopDto.getName(), createProjectWorkshopDto.getYear(), null, null);
   }
 }

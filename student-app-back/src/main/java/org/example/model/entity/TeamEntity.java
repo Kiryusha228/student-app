@@ -19,4 +19,8 @@ public class TeamEntity {
 
   @OneToMany(mappedBy = "team")
   private List<StudentProjectWorkshopEntity> studentProjectWorkshop;
+
+  @ManyToOne
+  @JoinColumn(name = "project_workshop_id", nullable = false)
+  private ProjectWorkshopEntity projectWorkshop;
 }

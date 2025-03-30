@@ -23,7 +23,8 @@ public class TeamMapper {
 
         return new TeamEntity(
                 0L,
-                studentsProjectWorkshop
+                studentsProjectWorkshop,
+                studentsProjectWorkshop.get(0).getProjectWorkshop()
         );
     }
 }

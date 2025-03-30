@@ -9,6 +9,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TeamListDto {
-    private List<TeamDto> teams;
+public class TeamWithStudentInfoDto {
+    Long id;
+    List<StudentInTeamDto> students;
 }
