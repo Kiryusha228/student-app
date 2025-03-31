@@ -72,7 +72,8 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     var lastStudentProjectWorkshop =
         studentProjectWorkshops.get(studentProjectWorkshops.size() - 1);
 
-    var questionnaire = questionnaireRepository.findByStudentProjectWorkshop(lastStudentProjectWorkshop);
+    var questionnaire =
+        questionnaireRepository.findByStudentProjectWorkshop(lastStudentProjectWorkshop);
 
     if (questionnaire.isEmpty()) {
       throw new QuestionnaireNotFoundException("У студента не заполнена анекта");

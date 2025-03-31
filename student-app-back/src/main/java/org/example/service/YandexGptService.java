@@ -2,9 +2,9 @@ package org.example.service;
 
 import java.util.List;
 import org.example.model.dto.database.StudentInfoDto;
-import org.example.model.dto.yandexgpt.response.YandexGptResponse;
+import org.example.model.dto.database.TeamListDto;
 
 public interface YandexGptService {
 
-  YandexGptResponse getTeams(List<StudentInfoDto> students);
+  TeamListDto getTeams(List<StudentInfoDto> students);
 }

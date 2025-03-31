@@ -10,22 +10,17 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "project_workshop")
-public class ProjectWorkshopEntity {
+@Table(name = "team")
+public class TeamEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
   private Long id;
 
-  @Column(name = "name")
-  private String name;
-
-  @Column(name = "year")
-  private Integer year;
-
-  @OneToMany(mappedBy = "projectWorkshop")
+  @OneToMany(mappedBy = "team")
   private List<StudentProjectWorkshopEntity> studentProjectWorkshop;
 
-  @OneToMany(mappedBy = "projectWorkshop")
-  private List<TeamEntity> teams;
+  @ManyToOne
+  @JoinColumn(name = "project_workshop_id", nullable = false)
+  private ProjectWorkshopEntity projectWorkshop;
 }

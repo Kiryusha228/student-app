@@ -30,4 +30,8 @@ public class StudentProjectWorkshopEntity {
 
   @OneToOne(mappedBy = "studentProjectWorkshop", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private StudentTestResultEntity studentTestResult;
+
+  @ManyToOne
+  @JoinColumn(name = "team_id")
+  private TeamEntity team;
 }
