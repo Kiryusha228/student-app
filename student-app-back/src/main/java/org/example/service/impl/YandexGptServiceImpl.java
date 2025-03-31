@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import io.github.cdimascio.dotenv.Dotenv;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -39,41 +38,54 @@ public class YandexGptServiceImpl implements YandexGptService {
   private final TeamService teamService;
   private final StudentProjectWorkshopService studentProjectWorkshopService;
 
-//  private static final String gptCommand =
-//      "Ты — помощник, который решает задачи по распределению студентов на команды. Тебе будет предоставлен JSON со списком студентов, где для каждого студента указаны следующие параметры:\n"
-//          + "- `studentProjectWorkshopId`: Id студента.\n"
-//          + "- `testResult`: Числовое значение результата теста (от 0 до 100).\n"
-//          + "- `experience`: Описание опыта работы или обучения.\n"
-//          + "- `languageProficiency`: Уровень владения языками программирования.\n"
-//          + "- `languageExperience`: Конкретный опыт использования технологий.\n"
-//          + "- `telegram`: Telegram-ник для связи.\n"
-//          + "- `role`: Предпочтительная роль (`frontend`, `backend`, `qa`, `all`).\n"
-//          + "\n"
-//          + "Задача: Распределить всех студентов на ровно 2 команды таким образом, чтобы:\n"
-//          + "1. Средний уровень знаний был примерно одинаковым во всех командах. Для расчета уровня знаний используй следующие параметры:\n"
-//          + "   - `testResult`: Числовое значение результата теста.\n"
-//          + "   - `experience`: Описание опыта работы или обучения. Например, студенты с большим опытом (`2+ года`) или значительным описанием навыков должны быть распределены более равномерно.\n"
-//          + "   - `languageProficiency`: Уровень владения языками программирования (например, продвинутый уровень Python или JavaScript может повысить общий уровень студента).\n"
-//          + "   - `languageExperience`: Конкретный опыт использования технологий (например, опыт работы с фреймворками React, Django или Selenium может считаться плюсом).\n"
-//          + "2. В каждой команде должна быть хотя бы одна роль из каждой категории (`frontend`, `backend`, `qa`). Если студент имеет роль `all`, он может занимать любую из этих ролей. Если невозможно соблюсти строгое распределение ролей, максимизируй разнообразие ролей в командах.\n"
-//          + "3. В командах должно быть одинаковое количество участников, если это невозможно, то разница в количестве участников должна быть минимальной"
-//          + "4. Все студенты должны быть распределены по командам без исключения. В ответе должно быть столько же студентов, сколько и во входных данных, и каждый студент должен встречаться только один раз.\n"
-//          + "\n"
-//          + "Ответ должен быть представлен в виде JSON следующего формата:\n"
-//          + "{\n"
-//          + "  \"teams\": [\n"
-//          + "    {\n"
-//          + "      \"students\": [ id студента 1, id студента 2, … ]\n"
-//          + "    },\n"
-//          + "    {\n"
-//          + "      \"students\": [ id студента 1, id студента 2, … ]\n"
-//          + "      ]\n"
-//          + "    },\n"
-//          + "    ...\n"
-//          + "  ]\n"
-//          + "}"
-//          + "\n"
-//          + "Нужны только данные без вводных фраз и объяснений. Не используй разметку Markdown!";
+  //  private static final String gptCommand =
+  //      "Ты — помощник, который решает задачи по распределению студентов на команды. Тебе будет
+  // предоставлен JSON со списком студентов, где для каждого студента указаны следующие
+  // параметры:\n"
+  //          + "- `studentProjectWorkshopId`: Id студента.\n"
+  //          + "- `testResult`: Числовое значение результата теста (от 0 до 100).\n"
+  //          + "- `experience`: Описание опыта работы или обучения.\n"
+  //          + "- `languageProficiency`: Уровень владения языками программирования.\n"
+  //          + "- `languageExperience`: Конкретный опыт использования технологий.\n"
+  //          + "- `telegram`: Telegram-ник для связи.\n"
+  //          + "- `role`: Предпочтительная роль (`frontend`, `backend`, `qa`, `all`).\n"
+  //          + "\n"
+  //          + "Задача: Распределить всех студентов на ровно 2 команды таким образом, чтобы:\n"
+  //          + "1. Средний уровень знаний был примерно одинаковым во всех командах. Для расчета
+  // уровня знаний используй следующие параметры:\n"
+  //          + "   - `testResult`: Числовое значение результата теста.\n"
+  //          + "   - `experience`: Описание опыта работы или обучения. Например, студенты с большим
+  // опытом (`2+ года`) или значительным описанием навыков должны быть распределены более
+  // равномерно.\n"
+  //          + "   - `languageProficiency`: Уровень владения языками программирования (например,
+  // продвинутый уровень Python или JavaScript может повысить общий уровень студента).\n"
+  //          + "   - `languageExperience`: Конкретный опыт использования технологий (например, опыт
+  // работы с фреймворками React, Django или Selenium может считаться плюсом).\n"
+  //          + "2. В каждой команде должна быть хотя бы одна роль из каждой категории (`frontend`,
+  // `backend`, `qa`). Если студент имеет роль `all`, он может занимать любую из этих ролей. Если
+  // невозможно соблюсти строгое распределение ролей, максимизируй разнообразие ролей в командах.\n"
+  //          + "3. В командах должно быть одинаковое количество участников, если это невозможно, то
+  // разница в количестве участников должна быть минимальной"
+  //          + "4. Все студенты должны быть распределены по командам без исключения. В ответе
+  // должно быть столько же студентов, сколько и во входных данных, и каждый студент должен
+  // встречаться только один раз.\n"
+  //          + "\n"
+  //          + "Ответ должен быть представлен в виде JSON следующего формата:\n"
+  //          + "{\n"
+  //          + "  \"teams\": [\n"
+  //          + "    {\n"
+  //          + "      \"students\": [ id студента 1, id студента 2, … ]\n"
+  //          + "    },\n"
+  //          + "    {\n"
+  //          + "      \"students\": [ id студента 1, id студента 2, … ]\n"
+  //          + "      ]\n"
+  //          + "    },\n"
+  //          + "    ...\n"
+  //          + "  ]\n"
+  //          + "}"
+  //          + "\n"
+  //          + "Нужны только данные без вводных фраз и объяснений. Не используй разметку
+  // Markdown!";
 
   @Override
   public TeamListDto getTeams(List<StudentInfoDto> students1) {
@@ -107,10 +119,12 @@ public class YandexGptServiceImpl implements YandexGptService {
     var createdTeams = responseMono.block();
 
     if (createdTeams == null) {
-      throw new YandexGptResponseNotFoundException("Произошла ошибка при получении ответа от YandexGpt");
+      throw new YandexGptResponseNotFoundException(
+          "Произошла ошибка при получении ответа от YandexGpt");
     }
 
-    var resultStringJson = createdTeams
+    var resultStringJson =
+        createdTeams
             .getResult()
             .getAlternatives()
             .get(0)
@@ -123,8 +137,7 @@ public class YandexGptServiceImpl implements YandexGptService {
     var teams = new TeamListDto();
     try {
       teams = objectMapper.reader().readValue(resultStringJson, TeamListDto.class);
-    }
-    catch (IOException exception) {
+    } catch (IOException exception) {
       exception.printStackTrace();
     }
 
@@ -139,9 +152,9 @@ public class YandexGptServiceImpl implements YandexGptService {
 
     var gptCommand = "";
     try {
-      gptCommand = Files.readString(Path.of("student-app-back/src/main/resources/yandexGptCommand.txt"));
-    }
-    catch (IOException exception) {
+      gptCommand =
+          Files.readString(Path.of("student-app-back/src/main/resources/yandexGptCommand.txt"));
+    } catch (IOException exception) {
       exception.printStackTrace();
     }
 

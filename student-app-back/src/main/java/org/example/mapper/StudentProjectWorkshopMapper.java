@@ -19,11 +19,11 @@ public class StudentProjectWorkshopMapper {
         studentProjectWorkshopEntity.getQuestionnaire().getRole());
   }
 
-  public StudentInTeamDto toStudentInTeamDto(StudentProjectWorkshopEntity studentProjectWorkshopEntity) {
+  public StudentInTeamDto toStudentInTeamDto(
+      StudentProjectWorkshopEntity studentProjectWorkshopEntity) {
     return new StudentInTeamDto(
-            studentProjectWorkshopEntity.getStudent().getName(),
-            studentProjectWorkshopEntity.getQuestionnaire().getTelegram(),
-            studentProjectWorkshopEntity.getQuestionnaire().getRole()
-    );
+        studentProjectWorkshopEntity.getStudent().getName(),
+        studentProjectWorkshopEntity.getQuestionnaire().getTelegram(),
+        studentProjectWorkshopEntity.getQuestionnaire().getRole());
   }
 }

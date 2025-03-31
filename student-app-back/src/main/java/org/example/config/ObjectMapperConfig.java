@@ -7,10 +7,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ObjectMapperConfig {
-    @Bean
-    ObjectMapper getObjectMapper() {
-        var mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        return mapper;
-    }
+  @Bean
+  ObjectMapper getObjectMapper() {
+    var mapper = new ObjectMapper();
+    mapper.registerModule(new JavaTimeModule());
+    return mapper;
+  }
 }

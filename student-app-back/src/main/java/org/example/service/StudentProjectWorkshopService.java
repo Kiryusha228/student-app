@@ -1,11 +1,9 @@
 package org.example.service;
 
 import java.util.List;
-
 import org.example.model.dto.database.StudentInTeamDto;
 import org.example.model.dto.database.StudentInfoDto;
 import org.example.model.entity.QuestionnaireEntity;
-import org.example.model.entity.StudentEntity;
 import org.example.model.entity.StudentProjectWorkshopEntity;
 import org.example.model.entity.StudentTestResultEntity;
 

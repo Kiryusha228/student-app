@@ -1,6 +1,5 @@
 package org.example.model.dto.database;
 
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,6 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TeamListDto {
-  private List<TeamDto> teams;
+public class ProjectWorkshopDto {
+  private Long id;
+  private String name;
+  private Integer year;
 }

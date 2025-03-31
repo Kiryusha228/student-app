@@ -15,7 +15,6 @@ import org.example.model.entity.StudentTestResultEntity;
 import org.example.repository.ProjectWorkshopRepository;
 import org.example.repository.StudentProjectWorkshopRepository;
 import org.example.repository.StudentRepository;
-import org.example.repository.TeamRepository;
 import org.example.service.ProjectWorkshopService;
 import org.example.service.StudentProjectWorkshopService;
 import org.springframework.stereotype.Service;
@@ -50,7 +49,8 @@ public class StudentProjectWorkshopServiceImpl implements StudentProjectWorkshop
 
   @Override
   public StudentProjectWorkshopEntity getStudentProjectWorkshopById(Long studentProjectWorkshopId) {
-    var studentProjectWorkshop = studentProjectWorkshopRepository.findById(studentProjectWorkshopId);
+    var studentProjectWorkshop =
+        studentProjectWorkshopRepository.findById(studentProjectWorkshopId);
     if (studentProjectWorkshop.isEmpty()) {
       throw new StudentProjectWorkshopNotFoundException("Такого студента в мастерской нет");
     }
@@ -79,7 +79,7 @@ public class StudentProjectWorkshopServiceImpl implements StudentProjectWorkshop
       throw new StudentNotFoundException("Такого студента не существует");
     }
 
-    //todo: добавить исключение на мастерскую
+    // todo: добавить исключение на мастерскую
 
     var projectWorkshopId = projectWorkshopService.getLastProjectWorkshopId();
     var projectWorkshop = projectWorkshopRepository.findById(projectWorkshopId);
@@ -89,7 +89,8 @@ public class StudentProjectWorkshopServiceImpl implements StudentProjectWorkshop
     }
 
     var studentProjectWorkshop =
-        new StudentProjectWorkshopEntity(0L, student.get(), projectWorkshop.get(), null, null, null);
+        new StudentProjectWorkshopEntity(
+            0L, student.get(), projectWorkshop.get(), null, null, null);
 
     var savedStudentProjectWorkshop = studentProjectWorkshopRepository.save(studentProjectWorkshop);
     projectWorkshopService.addStudent(projectWorkshopId, savedStudentProjectWorkshop);
@@ -107,9 +108,10 @@ public class StudentProjectWorkshopServiceImpl implements StudentProjectWorkshop
 
     var studentProjectWorkshops = student.get().getStudentProjectWorkshop();
     var lastStudentProjectWorkshop =
-            studentProjectWorkshops.get(studentProjectWorkshops.size() - 1);
+        studentProjectWorkshops.get(studentProjectWorkshops.size() - 1);
 
-    var studentsProjectWorkshopInTeam = lastStudentProjectWorkshop.getTeam().getStudentProjectWorkshop();
+    var studentsProjectWorkshopInTeam =
+        lastStudentProjectWorkshop.getTeam().getStudentProjectWorkshop();
 
     var studentsInTeam = new ArrayList<StudentInTeamDto>();
 
