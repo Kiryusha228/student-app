@@ -1,15 +1,14 @@
 package org.example.model.dto.database;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class TeamWithStudentInfoDto {
-    Long id;
-    List<StudentInTeamDto> students;
+  Long id;
+  List<StudentInTeamDto> students;
 }

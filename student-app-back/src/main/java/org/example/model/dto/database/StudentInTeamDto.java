@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentInTeamDto {
-    String name;
-    String telegram;
-    String role;
+  String name;
+  String telegram;
+  String role;
 }

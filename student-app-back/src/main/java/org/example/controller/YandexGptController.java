@@ -4,7 +4,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.example.model.dto.database.StudentInfoDto;
 import org.example.model.dto.database.TeamListDto;
-import org.example.model.dto.yandexgpt.response.YandexGptResponse;
 import org.example.service.YandexGptService;
 import org.springframework.web.bind.annotation.*;
 
