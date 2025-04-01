@@ -58,28 +58,12 @@ public class StudentProjectWorkshopServiceImpl implements StudentProjectWorkshop
   }
 
   @Override
-  public void setTestResult(
-      StudentProjectWorkshopEntity studentProjectWorkshop, StudentTestResultEntity testResult) {
-    studentProjectWorkshop.setStudentTestResult(testResult);
-    studentProjectWorkshopRepository.save(studentProjectWorkshop);
-  }
-
-  @Override
-  public void setQuestionnaire(
-      StudentProjectWorkshopEntity studentProjectWorkshop, QuestionnaireEntity questionnaire) {
-    studentProjectWorkshop.setQuestionnaire(questionnaire);
-    studentProjectWorkshopRepository.save(studentProjectWorkshop);
-  }
-
-  @Override
   public void createStudentProjectWorkshop(String studentId) {
     var student = studentRepository.findById(studentId);
 
     if (student.isEmpty()) {
       throw new StudentNotFoundException("Такого студента не существует");
     }
-
-    // todo: добавить исключение на мастерскую
 
     var projectWorkshopId = projectWorkshopService.getLastProjectWorkshopId();
     var projectWorkshop = projectWorkshopRepository.findById(projectWorkshopId);

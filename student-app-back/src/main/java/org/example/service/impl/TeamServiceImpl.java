@@ -19,9 +19,6 @@ public class TeamServiceImpl implements TeamService {
   private final TeamRepository teamRepository;
   private final TeamMapper teamMapper;
   private final StudentProjectWorkshopRepository studentProjectWorkshopRepository;
-  private final ProjectWorkshopRepository projectWorkshopRepository;
-  private final ProjectWorkshopService projectWorkshopService;
-  private final StudentProjectWorkshopMapper studentProjectWorkshopMapper;
 
   @Override
   @Transactional

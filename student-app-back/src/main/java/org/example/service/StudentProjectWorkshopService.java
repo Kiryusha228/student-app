@@ -12,12 +12,6 @@ public interface StudentProjectWorkshopService {
 
   StudentProjectWorkshopEntity getStudentProjectWorkshopById(Long studentProjectWorkshopId);
 
-  void setTestResult(
-      StudentProjectWorkshopEntity studentProjectWorkshop, StudentTestResultEntity testResult);
-
-  void setQuestionnaire(
-      StudentProjectWorkshopEntity studentProjectWorkshop, QuestionnaireEntity questionnaire);
-
   void createStudentProjectWorkshop(String studentId);
 
   List<StudentInTeamDto> getTeam(String studentId);

@@ -7,4 +7,5 @@ import org.example.model.dto.database.TeamListDto;
 public interface YandexGptService {
 
   TeamListDto getTeams(List<StudentInfoDto> students);
+
 }
