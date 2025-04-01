@@ -15,10 +15,6 @@ import org.springframework.stereotype.Service;
 public class StudentServiceImpl implements StudentService {
 
   private final StudentRepository studentRepository;
-  private final StudentTestResultRepository studentTestResultRepository;
-  private final QuestionnaireRepository questionnaireRepository;
-
-  private final StudentMapper studentMapper;
 
   @Override
   public StudentEntity getStudentById(String studentId) {
