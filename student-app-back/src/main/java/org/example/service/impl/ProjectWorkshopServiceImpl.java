@@ -1,9 +1,11 @@
 package org.example.service.impl;
 
 import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.example.exception.ProjectWorkshopDisabledException;
 import org.example.exception.ProjectWorkshopNotFoundException;
 import org.example.mapper.ProjectWorkshopMapper;
 import org.example.mapper.StudentProjectWorkshopMapper;
@@ -38,7 +40,12 @@ public class ProjectWorkshopServiceImpl implements ProjectWorkshopService {
     if (projectWorkshopOptional.isEmpty()) {
       throw new ProjectWorkshopNotFoundException("Такой мастерской не существует");
     }
+
     var projectWorkshop = projectWorkshopOptional.get();
+
+    if (!projectWorkshop.getIsEnable()) {
+      throw new ProjectWorkshopDisabledException("Набор на последнюю мастерскую закрыт");
+    }
 
     projectWorkshop.getStudentProjectWorkshop().add(studentProjectWorkshop);
     studentProjectWorkshop.setProjectWorkshop(projectWorkshop);
@@ -92,5 +99,33 @@ public class ProjectWorkshopServiceImpl implements ProjectWorkshopService {
       teamsWithInfo.add(new TeamWithStudentInfoDto(team.getId(), studentsInTeamWithInfo));
     }
     return teamsWithInfo;
+  }
+
+  @Override
+  @Transactional
+  public void enableProjectWorkshop(Long projectWorkshopId) {
+    var projectWorkshop = projectWorkshopRepository.findById(projectWorkshopId);
+
+    if (projectWorkshop.isEmpty()) {
+      throw new ProjectWorkshopNotFoundException(
+          "Мастерская с ID " + projectWorkshopId + " не найдена");
+    }
+
+    projectWorkshop.get().setIsEnable(true);
+    projectWorkshop.get().setStartDateTime(LocalDateTime.now());
+  }
+
+  @Override
+  @Transactional
+  public void disableProjectWorkshop(Long projectWorkshopId) {
+    var projectWorkshop = projectWorkshopRepository.findById(projectWorkshopId);
+
+    if (projectWorkshop.isEmpty()) {
+      throw new ProjectWorkshopNotFoundException(
+          "Мастерская с ID " + projectWorkshopId + " не найдена");
+    }
+
+    projectWorkshop.get().setIsEnable(false);
+    projectWorkshop.get().setEndDateTime(LocalDateTime.now());
   }
 }

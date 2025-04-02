@@ -3,12 +3,12 @@ package org.example.service;
 import java.util.List;
 import org.example.model.dto.database.StudentInTeamDto;
 import org.example.model.dto.database.StudentInfoDto;
-import org.example.model.entity.QuestionnaireEntity;
 import org.example.model.entity.StudentProjectWorkshopEntity;
-import org.example.model.entity.StudentTestResultEntity;
 
 public interface StudentProjectWorkshopService {
-  List<StudentInfoDto> getAllStudents();
+  List<StudentInfoDto> getAllPastStudents();
+
+  List<StudentInfoDto> getAllStudentsByProjectWorkshopId(Long projectWorkshopId);
 
   StudentProjectWorkshopEntity getStudentProjectWorkshopById(Long studentProjectWorkshopId);
 
