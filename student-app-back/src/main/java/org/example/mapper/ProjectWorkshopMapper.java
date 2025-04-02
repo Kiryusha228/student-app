@@ -10,13 +10,23 @@ public class ProjectWorkshopMapper {
   public ProjectWorkshopEntity toProjectWorkshopEntity(
       CreateProjectWorkshopDto createProjectWorkshopDto) {
     return new ProjectWorkshopEntity(
-        0L, createProjectWorkshopDto.getName(), createProjectWorkshopDto.getYear(), null, null);
+        0L,
+        createProjectWorkshopDto.getName(),
+        createProjectWorkshopDto.getYear(),
+        null,
+        null,
+        false,
+        null,
+        null);
   }
 
   public ProjectWorkshopDto toProjectWorkshopDto(ProjectWorkshopEntity projectWorkshopEntity) {
     return new ProjectWorkshopDto(
         projectWorkshopEntity.getId(),
         projectWorkshopEntity.getName(),
-        projectWorkshopEntity.getYear());
+        projectWorkshopEntity.getYear(),
+        projectWorkshopEntity.getStartDateTime(),
+        projectWorkshopEntity.getEndDateTime(),
+        projectWorkshopEntity.getIsEnable());
   }
 }

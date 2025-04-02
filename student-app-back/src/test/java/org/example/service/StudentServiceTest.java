@@ -1,5 +1,10 @@
 package org.example.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Optional;
 import org.example.exception.StudentNotFoundException;
 import org.example.model.entity.StudentEntity;
 import org.example.repository.StudentRepository;
@@ -10,96 +15,84 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 @ExtendWith(MockitoExtension.class)
 class StudentServiceTest {
-    @Mock
-    private StudentRepository studentRepository;
+  @Mock private StudentRepository studentRepository;
 
-    @InjectMocks
-    private StudentServiceImpl studentService;
+  @InjectMocks private StudentServiceImpl studentService;
 
-    @Test
-    void getStudentById() {
-        //Arrange
-        var studentId = "studentId";
-        var student = new StudentEntity();
-        student.setId(studentId);
+  @Test
+  void getStudentById() {
+    // Arrange
+    var studentId = "studentId";
+    var student = new StudentEntity();
+    student.setId(studentId);
 
-        when(studentRepository.findById(studentId)).thenReturn(Optional.of(student));
+    when(studentRepository.findById(studentId)).thenReturn(Optional.of(student));
 
-        //Act
-        var gettedStudent = studentService.getStudentById(studentId);
+    // Act
+    var gettedStudent = studentService.getStudentById(studentId);
 
-        //Assert
-        assertEquals(student, gettedStudent);
-    }
+    // Assert
+    assertEquals(student, gettedStudent);
+  }
 
-    @Test
-    void getStudentByIdWithStudentNotFoundException() {
-        //Arrange
-        var studentId = "studentId";
-        when(studentRepository.findById(studentId)).thenReturn(Optional.empty());
-        //Act & Assert
-        assertThrows(StudentNotFoundException.class, () ->
-                studentService.getStudentById(studentId)
-        );
-    }
+  @Test
+  void getStudentByIdWithStudentNotFoundException() {
+    // Arrange
+    var studentId = "studentId";
+    when(studentRepository.findById(studentId)).thenReturn(Optional.empty());
+    // Act & Assert
+    assertThrows(StudentNotFoundException.class, () -> studentService.getStudentById(studentId));
+  }
 
-    @Test
-    void createStudent() {
-        //Arrange
-        var student = new StudentEntity();
-        student.setId("studentId");
-        //Act
-        studentService.createStudent(student);
-        //Assert
-        verify(studentRepository).save(student);
-    }
+  @Test
+  void createStudent() {
+    // Arrange
+    var student = new StudentEntity();
+    student.setId("studentId");
+    // Act
+    studentService.createStudent(student);
+    // Assert
+    verify(studentRepository).save(student);
+  }
 
-    @Test
-    void updateStudent() {
-        //Arrange
-        var student = new StudentEntity();
-        student.setId("studentId");
-        student.setName("student name");
+  @Test
+  void updateStudent() {
+    // Arrange
+    var student = new StudentEntity();
+    student.setId("studentId");
+    student.setName("student name");
 
-        var newStudent = new StudentEntity();
-        newStudent.setId("studentId");
-        newStudent.setName("new student name");
+    var newStudent = new StudentEntity();
+    newStudent.setId("studentId");
+    newStudent.setName("new student name");
 
-        when(studentRepository.findById(newStudent.getId())).thenReturn(Optional.of(student));
-        //Act
-        studentService.updateStudent(newStudent);
-        //Assert
-        verify(studentRepository).save(newStudent);
-    }
+    when(studentRepository.findById(newStudent.getId())).thenReturn(Optional.of(student));
+    // Act
+    studentService.updateStudent(newStudent);
+    // Assert
+    verify(studentRepository).save(newStudent);
+  }
 
-    @Test
-    void updateStudentWithStudentNotFoundException() {
-        //Arrange
-        var newStudent = new StudentEntity();
-        newStudent.setId("studentId");
+  @Test
+  void updateStudentWithStudentNotFoundException() {
+    // Arrange
+    var newStudent = new StudentEntity();
+    newStudent.setId("studentId");
 
-        when(studentRepository.findById(newStudent.getId())).thenReturn(Optional.empty());
-        //Act & Assert
-        assertThrows(StudentNotFoundException.class, () ->
-                studentService.updateStudent(newStudent)
-        );
-    }
+    when(studentRepository.findById(newStudent.getId())).thenReturn(Optional.empty());
+    // Act & Assert
+    assertThrows(StudentNotFoundException.class, () -> studentService.updateStudent(newStudent));
+  }
 
-    @Test
-    void deleteStudent() {
-        //Arrange
-        var studentId = "studentId";
-        //Act
-        studentService.deleteStudent(studentId);
-        //Assert
-        verify(studentRepository).deleteById(studentId);
-    }
+  @Test
+  void deleteStudent() {
+    // Arrange
+    var studentId = "studentId";
+    // Act
+    studentService.deleteStudent(studentId);
+    // Assert
+    verify(studentRepository).deleteById(studentId);
+  }
 }

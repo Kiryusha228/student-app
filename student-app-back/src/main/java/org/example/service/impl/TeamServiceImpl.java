@@ -3,13 +3,10 @@ package org.example.service.impl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.exception.StudentProjectWorkshopNotFoundException;
-import org.example.mapper.StudentProjectWorkshopMapper;
 import org.example.mapper.TeamMapper;
 import org.example.model.dto.database.TeamListDto;
-import org.example.repository.ProjectWorkshopRepository;
 import org.example.repository.StudentProjectWorkshopRepository;
 import org.example.repository.TeamRepository;
-import org.example.service.ProjectWorkshopService;
 import org.example.service.TeamService;
 import org.springframework.stereotype.Service;
 

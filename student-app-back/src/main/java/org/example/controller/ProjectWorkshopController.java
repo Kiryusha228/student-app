@@ -38,4 +38,14 @@ public class ProjectWorkshopController {
   public Long getLastProjectWorkshopId() {
     return projectWorkshopService.getLastProjectWorkshopId();
   }
+
+  @PostMapping("/enable")
+  public void enableProjectWorkshop(Long projectWorkshopId) {
+    projectWorkshopService.enableProjectWorkshop(projectWorkshopId);
+  }
+
+  @PostMapping("/disable")
+  public void disableProjectWorkshop(Long projectWorkshopId) {
+    projectWorkshopService.disableProjectWorkshop(projectWorkshopId);
+  }
 }

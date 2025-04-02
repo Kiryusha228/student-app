@@ -24,11 +24,21 @@ public class StudentProjectWorkshopController {
 
   @PostMapping("/info") // todo разобраться почему он хочет post
   public List<StudentInfoDto> getAllStudentInfo() {
-    return studentProjectWorkshopService.getAllStudents();
+    return studentProjectWorkshopService.getAllPastStudents();
   }
 
   @GetMapping("/team")
   public List<StudentInTeamDto> getTeam(Principal principal) {
     return studentProjectWorkshopService.getTeam(principal.getName());
+  }
+
+  @GetMapping("/get-all-past-students")
+  public List<StudentInfoDto> getAllPastStudents() {
+    return studentProjectWorkshopService.getAllPastStudents();
+  }
+
+  @GetMapping("/get-all-students")
+  public List<StudentInfoDto> getAllStudentsByProjectWorkshopId(Long projectWorkshopId) {
+    return studentProjectWorkshopService.getAllStudentsByProjectWorkshopId(projectWorkshopId);
   }
 }
