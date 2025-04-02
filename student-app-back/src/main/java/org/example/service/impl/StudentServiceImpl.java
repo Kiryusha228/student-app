@@ -2,11 +2,8 @@ package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.example.exception.StudentNotFoundException;
-import org.example.mapper.StudentMapper;
 import org.example.model.entity.StudentEntity;
-import org.example.repository.QuestionnaireRepository;
 import org.example.repository.StudentRepository;
-import org.example.repository.StudentTestResultRepository;
 import org.example.service.StudentService;
 import org.springframework.stereotype.Service;
 

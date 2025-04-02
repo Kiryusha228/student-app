@@ -1,5 +1,6 @@
 package org.example.service.impl;
 
+import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -9,9 +10,7 @@ import org.example.exception.StudentProjectWorkshopNotFoundException;
 import org.example.mapper.StudentProjectWorkshopMapper;
 import org.example.model.dto.database.StudentInTeamDto;
 import org.example.model.dto.database.StudentInfoDto;
-import org.example.model.entity.QuestionnaireEntity;
 import org.example.model.entity.StudentProjectWorkshopEntity;
-import org.example.model.entity.StudentTestResultEntity;
 import org.example.repository.ProjectWorkshopRepository;
 import org.example.repository.StudentProjectWorkshopRepository;
 import org.example.repository.StudentRepository;
@@ -29,7 +28,23 @@ public class StudentProjectWorkshopServiceImpl implements StudentProjectWorkshop
   private final StudentProjectWorkshopMapper studentProjectWorkshopMapper;
 
   @Override
-  public List<StudentInfoDto> getAllStudents() {
+  public List<StudentInfoDto> getAllStudentsByProjectWorkshopId(Long projectWorkshopId) {
+    var students =
+        studentProjectWorkshopRepository.findAll().stream()
+            .filter(student -> projectWorkshopId.equals(student.getProjectWorkshop().getId()))
+            .toList();
+
+    var allStudentsInfo = new ArrayList<StudentInfoDto>();
+
+    for (var student : students) {
+      allStudentsInfo.add(studentProjectWorkshopMapper.toStudentInfoDto(student));
+    }
+
+    return allStudentsInfo;
+  }
+
+  @Override
+  public List<StudentInfoDto> getAllPastStudents() {
     var lastProjectWorkshopId = projectWorkshopService.getLastProjectWorkshopId();
     var students =
         studentProjectWorkshopRepository.findAll().stream()
@@ -58,6 +73,7 @@ public class StudentProjectWorkshopServiceImpl implements StudentProjectWorkshop
   }
 
   @Override
+  @Transactional
   public void createStudentProjectWorkshop(String studentId) {
     var student = studentRepository.findById(studentId);
 

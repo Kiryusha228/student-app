@@ -18,4 +18,8 @@ public interface ProjectWorkshopService {
   Long getLastProjectWorkshopId();
 
   List<TeamWithStudentInfoDto> getTeams(Long projectWorkshopId);
+
+  void enableProjectWorkshop(Long projectWorkshopId);
+
+  void disableProjectWorkshop(Long projectWorkshopId);
 }

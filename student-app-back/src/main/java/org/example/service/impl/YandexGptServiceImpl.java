@@ -5,8 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import io.github.cdimascio.dotenv.Dotenv;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.example.exception.YandexGptResponseNotFoundException;
@@ -43,7 +41,7 @@ public class YandexGptServiceImpl implements YandexGptService {
   @Override
   public TeamListDto getTeams(List<StudentInfoDto> students1) {
 
-    var students = studentProjectWorkshopService.getAllStudents();
+    var students = studentProjectWorkshopService.getAllPastStudents();
 
     var apiUrl = dotenv.get("YANDEX_API_URL");
     var apiKey = dotenv.get("YANDEX_API_KEY");
@@ -97,13 +95,15 @@ public class YandexGptServiceImpl implements YandexGptService {
     return teams;
   }
 
-  private YandexGptRequest getYandexGptTeamRequest(
-      String folderId, List<StudentInfoDto> students) throws JsonProcessingException {
+  private YandexGptRequest getYandexGptTeamRequest(String folderId, List<StudentInfoDto> students)
+      throws JsonProcessingException {
     var completionOptions = new CompletionOptions(false, 0.6, 10000);
 
-
-
-    var systemMessage = new Message("system", fileReaderService.getFromFile("student-app-back/src/main/resources/yandexGptCommand.txt"));
+    var systemMessage =
+        new Message(
+            "system",
+            fileReaderService.getFromFile(
+                "student-app-back/src/main/resources/yandexGptCommand.txt"));
 
     ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
     String json = ow.writeValueAsString(students);
