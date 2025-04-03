@@ -76,6 +76,13 @@ public class ProjectWorkshopServiceImpl implements ProjectWorkshopService {
   }
 
   @Override
+  public ProjectWorkshopDto getLastProjectWorkshop() {
+    var projectWorkshops = projectWorkshopRepository.findAll();
+    return projectWorkshopMapper.toProjectWorkshopDto(
+        projectWorkshops.get(projectWorkshops.size() - 1));
+  }
+
+  @Override
   public Long getLastProjectWorkshopId() {
     // todo: возможно сделать лучше
     var projectWorkshops = projectWorkshopRepository.findAll();

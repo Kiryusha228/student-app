@@ -39,7 +39,7 @@ public class YandexGptServiceImpl implements YandexGptService {
   private final FileReaderService fileReaderService;
 
   @Override
-  public TeamListDto getTeams(List<StudentInfoDto> students1) {
+  public void getTeams(String teamCount) {
 
     var students = studentProjectWorkshopService.getAllPastStudents();
 
@@ -49,7 +49,7 @@ public class YandexGptServiceImpl implements YandexGptService {
 
     YandexGptRequest request = new YandexGptRequest();
     try {
-      request = getYandexGptTeamRequest(folderId, students);
+      request = getYandexGptTeamRequest(folderId, students, teamCount);
     } catch (JsonProcessingException ex) {
 
       // todo: add logger
@@ -91,19 +91,18 @@ public class YandexGptServiceImpl implements YandexGptService {
     }
 
     teamService.createTeams(teams);
-
-    return teams;
   }
 
-  private YandexGptRequest getYandexGptTeamRequest(String folderId, List<StudentInfoDto> students)
+  private YandexGptRequest getYandexGptTeamRequest(
+      String folderId, List<StudentInfoDto> students, String teamCount)
       throws JsonProcessingException {
     var completionOptions = new CompletionOptions(false, 0.6, 10000);
 
-    var systemMessage =
-        new Message(
-            "system",
-            fileReaderService.getFromFile(
-                "student-app-back/src/main/resources/yandexGptCommand.txt"));
+    var command =
+        fileReaderService.getFromFile("student-app-back/src/main/resources/yandexGptCommand.txt");
+    command = command.replace("'teamsCount'", teamCount);
+
+    var systemMessage = new Message("system", command);
 
     ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
     String json = ow.writeValueAsString(students);

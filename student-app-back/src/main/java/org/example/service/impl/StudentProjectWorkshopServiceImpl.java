@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.example.exception.ProjectWorkshopNotFoundException;
+import org.example.exception.QuestionnaireNotFoundException;
 import org.example.exception.StudentNotFoundException;
 import org.example.exception.StudentProjectWorkshopNotFoundException;
 import org.example.mapper.StudentProjectWorkshopMapper;
@@ -12,6 +13,7 @@ import org.example.model.dto.database.StudentInTeamDto;
 import org.example.model.dto.database.StudentInfoDto;
 import org.example.model.entity.StudentProjectWorkshopEntity;
 import org.example.repository.ProjectWorkshopRepository;
+import org.example.repository.QuestionnaireRepository;
 import org.example.repository.StudentProjectWorkshopRepository;
 import org.example.repository.StudentRepository;
 import org.example.service.ProjectWorkshopService;
@@ -26,6 +28,7 @@ public class StudentProjectWorkshopServiceImpl implements StudentProjectWorkshop
   private final StudentProjectWorkshopRepository studentProjectWorkshopRepository;
   private final ProjectWorkshopService projectWorkshopService;
   private final StudentProjectWorkshopMapper studentProjectWorkshopMapper;
+  private final QuestionnaireRepository questionnaireRepository;
 
   @Override
   public List<StudentInfoDto> getAllStudentsByProjectWorkshopId(Long projectWorkshopId) {
@@ -120,5 +123,29 @@ public class StudentProjectWorkshopServiceImpl implements StudentProjectWorkshop
     }
 
     return studentsInTeam;
+  }
+
+  @Override
+  public StudentInfoDto getStudentInfoByTelegram(String telegram) {
+    var questionnaire = questionnaireRepository.findByTelegram(telegram);
+    if (questionnaire.isEmpty()) {
+      throw new QuestionnaireNotFoundException(
+          "Анкета студента по указанному телеграмму не найдена");
+    }
+    return studentProjectWorkshopMapper.toStudentInfoDto(
+        questionnaire.get().getStudentProjectWorkshop());
+  }
+
+  @Override
+  public StudentInfoDto getStudentInfoByName(String name) {
+    var student = studentRepository.findByName(name);
+    if (student.isEmpty()) {
+      throw new StudentNotFoundException("Студент не найден");
+    }
+
+    var studentsProjectWorkshop = student.get().getStudentProjectWorkshop();
+
+    return studentProjectWorkshopMapper.toStudentInfoDto(
+        studentsProjectWorkshop.get(studentsProjectWorkshop.size() - 1));
   }
 }

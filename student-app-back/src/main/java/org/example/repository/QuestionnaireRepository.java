@@ -12,4 +12,6 @@ public interface QuestionnaireRepository extends JpaRepository<QuestionnaireEnti
 
   Optional<QuestionnaireEntity> findByStudentProjectWorkshop(
       StudentProjectWorkshopEntity studentProjectWorkshop);
+
+  Optional<QuestionnaireEntity> findByTelegram(String telegram);
 }
