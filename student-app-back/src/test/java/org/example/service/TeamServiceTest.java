@@ -1,13 +1,13 @@
 package org.example.service;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
 import java.util.Optional;
 import org.example.exception.StudentProjectWorkshopNotFoundException;
 import org.example.mapper.TeamMapper;
+import org.example.model.dto.database.ProjectWorkshopDto;
 import org.example.model.dto.database.TeamDto;
 import org.example.model.dto.database.TeamListDto;
 import org.example.model.entity.StudentProjectWorkshopEntity;
@@ -26,7 +26,7 @@ class TeamServiceTest {
   @Mock private TeamRepository teamRepository;
   @Mock private TeamMapper teamMapper;
   @Mock private StudentProjectWorkshopRepository studentProjectWorkshopRepository;
-
+  @Mock private ProjectWorkshopService projectWorkshopService;
   @InjectMocks private TeamServiceImpl teamService;
 
   @Test
@@ -45,12 +45,16 @@ class TeamServiceTest {
 
     var teamList = new TeamListDto(List.of(team));
 
+    var projectWorkshop = new ProjectWorkshopDto();
+    projectWorkshop.setIsEnable(true);
+
     when(teamMapper.toTeamEntity(team)).thenReturn(teamEntity);
     when(teamRepository.save(teamEntity)).thenReturn(teamEntity);
     when(studentProjectWorkshopRepository.findById(student1.getId()))
         .thenReturn(Optional.of(student1));
     when(studentProjectWorkshopRepository.findById(student2.getId()))
         .thenReturn(Optional.of(student2));
+    when(projectWorkshopService.getLastProjectWorkshop()).thenReturn(projectWorkshop);
 
     // Act
     teamService.createTeams(teamList);
@@ -77,9 +81,13 @@ class TeamServiceTest {
 
     var teamList = new TeamListDto(List.of(team));
 
+    var projectWorkshop = new ProjectWorkshopDto();
+    projectWorkshop.setIsEnable(true);
+
     when(teamMapper.toTeamEntity(team)).thenReturn(teamEntity);
     when(teamRepository.save(teamEntity)).thenReturn(teamEntity);
     when(studentProjectWorkshopRepository.findById(student1.getId())).thenReturn(Optional.empty());
+    when(projectWorkshopService.getLastProjectWorkshop()).thenReturn(projectWorkshop);
 
     // Act & Assert
     assertThrows(

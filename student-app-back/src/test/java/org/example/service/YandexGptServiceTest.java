@@ -100,10 +100,9 @@ class YandexGptServiceTest {
     }
 
     // Act
-    var gettedTeams = yandexGptService.getTeams(null);
+    yandexGptService.getTeams("2");
 
     // Assert
     verify(teamService).createTeams(expectedTeams);
-    assertEquals(expectedTeams, gettedTeams);
   }
 }
