@@ -34,9 +34,14 @@ public class ProjectWorkshopController {
     return projectWorkshopService.getProjectWorkshopById(projectWorkshopId);
   }
 
-  @GetMapping("/get/last")
+  @GetMapping("/get/last-id")
   public Long getLastProjectWorkshopId() {
     return projectWorkshopService.getLastProjectWorkshopId();
+  }
+
+  @GetMapping("/get/last")
+  public ProjectWorkshopDto getLastProjectWorkshop() {
+    return projectWorkshopService.getLastProjectWorkshop();
   }
 
   @PostMapping("/enable")

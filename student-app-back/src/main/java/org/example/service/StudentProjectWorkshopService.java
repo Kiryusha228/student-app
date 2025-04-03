@@ -15,4 +15,8 @@ public interface StudentProjectWorkshopService {
   void createStudentProjectWorkshop(String studentId);
 
   List<StudentInTeamDto> getTeam(String studentId);
+
+  StudentInfoDto getStudentInfoByTelegram(String telegram);
+
+  StudentInfoDto getStudentInfoByName(String name);
 }
