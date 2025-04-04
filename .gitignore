@@ -63,3 +63,7 @@ bin/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+###Keycloak###
+/keycloak
+/postgres-keycloak-data

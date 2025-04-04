@@ -1,0 +1,66 @@
+#version: '3'
+
+volumes:
+  student-app-db:
+
+services:
+  student-app-db:
+    image: 'postgres:latest'
+    container_name: 'student-app-db'
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    environment:
+      - 'POSTGRES_USER=${DB_USERNAME}'
+      - 'POSTGRES_PASSWORD=${DB_PASSWORD}'
+      - 'POSTGRES_DB=${DB_NAME}'
+    volumes:
+      - student-app-db:/var/lib/postgresql/data
+
+  keycloak_db:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: ${KEYCLOAK_DB}
+      POSTGRES_USER: ${KEYCLOAK_DB_USER}
+      POSTGRES_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+    volumes:
+      - ./postgres-keycloak-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:21.1
+    environment:
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_DB: postgres
+      KC_DB_URL: ${KC_DB_URL}
+      KC_DB_USERNAME: ${KC_DB_USERNAME}
+      KC_DB_PASSWORD: ${KC_DB_PASSWORD}
+    command:
+      - start-dev
+      - --import-realm
+    volumes:
+      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
+    ports:
+      - "8081:8080"
+    depends_on:
+      - keycloak_db
+
+#  student-app-back:
+#    container_name: 'student-app-back'
+#    image: 'student-app-back'
+#    build:
+#      context: ./
+#      dockerfile: 'student-app-back/Dockerfile'
+#    env_file:
+#      - .env
+#    environment:
+#      - JAVA_OPTS=-Xmx512M
+#      - SPRING_DATASOURCE_URL=${DB_LINK_BACK}
+#      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+#      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+#    ports:
+#      - "8080:8080"
+#    restart: on-failure
