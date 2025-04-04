@@ -31,19 +31,19 @@ public class StudentProjectWorkshopServiceImpl implements StudentProjectWorkshop
   private final QuestionnaireRepository questionnaireRepository;
 
   @Override
-  public List<StudentInfoDto> getAllStudentsByProjectWorkshopId(Long projectWorkshopId) {
+  public List<StudentInTeamDto> getAllStudentsByProjectWorkshopId(Long projectWorkshopId) {
     var students =
         studentProjectWorkshopRepository.findAll().stream()
             .filter(student -> projectWorkshopId.equals(student.getProjectWorkshop().getId()))
             .toList();
 
-    var allStudentsInfo = new ArrayList<StudentInfoDto>();
+    var studentsInfo = new ArrayList<StudentInTeamDto>();
 
     for (var student : students) {
-      allStudentsInfo.add(studentProjectWorkshopMapper.toStudentInfoDto(student));
+      studentsInfo.add(studentProjectWorkshopMapper.toStudentInTeamDto(student));
     }
 
-    return allStudentsInfo;
+    return studentsInfo;
   }
 
   @Override
