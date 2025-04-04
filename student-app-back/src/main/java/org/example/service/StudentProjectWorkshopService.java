@@ -8,7 +8,7 @@ import org.example.model.entity.StudentProjectWorkshopEntity;
 public interface StudentProjectWorkshopService {
   List<StudentInfoDto> getAllPastStudents();
 
-  List<StudentInfoDto> getAllStudentsByProjectWorkshopId(Long projectWorkshopId);
+  List<StudentInTeamDto> getAllStudentsByProjectWorkshopId(Long projectWorkshopId);
 
   StudentProjectWorkshopEntity getStudentProjectWorkshopById(Long studentProjectWorkshopId);
 
