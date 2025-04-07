@@ -15,6 +15,8 @@ public interface ProjectWorkshopService {
 
   ProjectWorkshopDto getProjectWorkshopById(Long projectWorkshopId);
 
+  ProjectWorkshopDto getLastProjectWorkshop();
+
   Long getLastProjectWorkshopId();
 
   List<TeamWithStudentInfoDto> getTeams(Long projectWorkshopId);

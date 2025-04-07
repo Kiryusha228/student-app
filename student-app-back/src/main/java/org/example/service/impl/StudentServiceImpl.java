@@ -44,4 +44,9 @@ public class StudentServiceImpl implements StudentService {
   public void deleteStudent(String studentId) {
     studentRepository.deleteById(studentId);
   }
+
+  @Override
+  public Boolean checkRegistration(String userMail) {
+    return studentRepository.findByMail(userMail).isPresent();
+  }
 }

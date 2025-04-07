@@ -38,7 +38,17 @@ public class StudentProjectWorkshopController {
   }
 
   @GetMapping("/get-all-students")
-  public List<StudentInfoDto> getAllStudentsByProjectWorkshopId(Long projectWorkshopId) {
+  public List<StudentInTeamDto> getAllStudentsByProjectWorkshopId(Long projectWorkshopId) {
     return studentProjectWorkshopService.getAllStudentsByProjectWorkshopId(projectWorkshopId);
+  }
+
+  @GetMapping("/get-by-name")
+  public StudentInfoDto getStudentProjectWorkshopByName(String name) {
+    return studentProjectWorkshopService.getStudentInfoByName(name);
+  }
+
+  @GetMapping("/get-by-telegram")
+  public StudentInfoDto getStudentProjectWorkshopByTelegram(String telegram) {
+    return studentProjectWorkshopService.getStudentInfoByTelegram(telegram);
   }
 }

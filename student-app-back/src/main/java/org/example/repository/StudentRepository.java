@@ -8,4 +8,8 @@ public interface StudentRepository extends JpaRepository<StudentEntity, String> 
 
   @Override
   Optional<StudentEntity> findById(String id);
+
+  Optional<StudentEntity> findByMail(String mail);
+
+  Optional<StudentEntity> findByName(String name);
 }

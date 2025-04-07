@@ -37,4 +37,9 @@ public class StudentController {
   public void deleteStudent(Principal principal) {
     studentService.deleteStudent(principal.getName());
   }
+
+  @GetMapping("/check")
+  public Boolean checkRegistration(String userMail) {
+    return studentService.checkRegistration(userMail);
+  }
 }

@@ -13,11 +13,6 @@ public class StudentTestResultController {
 
   private final StudentTestResultService testService;
 
-  @PostMapping("/add")
-  public void addTest(Principal principal, @RequestBody StudentTestResultDto testDto) {
-    testService.createTestResult(testDto, principal.getName());
-  }
-
   @GetMapping("/get")
   public StudentTestResultDto getTest(Principal principal) {
     return testService.getTestResult(principal.getName());

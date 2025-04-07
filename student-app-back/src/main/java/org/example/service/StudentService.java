@@ -11,4 +11,6 @@ public interface StudentService {
   void updateStudent(StudentEntity studentEntity);
 
   void deleteStudent(String studentId);
+
+  Boolean checkRegistration(String userMail);
 }

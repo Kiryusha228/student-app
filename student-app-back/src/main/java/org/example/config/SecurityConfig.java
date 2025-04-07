@@ -26,8 +26,16 @@ public class SecurityConfig {
                         "/api/test/add",
                         "/api/test/get",
                         "/api/test/delete",
-                        "/api/student",
-                        "/api/gpt/**")
+                        "/api/student/**",
+                        "/api/gpt/**",
+                        "/api/test-result/get",
+                        "/api/student-project-workshop/info",
+                        "/api/student-project-workshop/get-all-students",
+                        "/api/student-project-workshop/get-all-past-students",
+                        "/api/student-project-workshop/get-by-name",
+                        "/api/student-project-workshop/get-by-telegram",
+                        "/api/project-workshop/**",
+                        "/api/hr/**")
                     .permitAll()
                     .anyRequest()
                     .authenticated())
