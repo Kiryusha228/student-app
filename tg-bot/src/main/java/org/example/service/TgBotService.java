@@ -34,6 +34,8 @@ public class TgBotService extends TelegramLongPollingBot {
         DEFAULT,
         AWAITING_CREATING_WORKSHOP,
         AWAITING_CREATING_TEAMS,
+        AWAITING_INPUT_NICKNAME,
+        AWAITING_INPUT_PWS,
     }
 
     public TgBotService(TgBotProperties tgBotProperties, StudentAppService studentAppService) {
@@ -64,6 +66,9 @@ public class TgBotService extends TelegramLongPollingBot {
                         break;
                     case AWAITING_CREATING_TEAMS:
                         handleCreateTeamInput(chatId, messageText);
+                        break;
+                    case AWAITING_INPUT_NICKNAME:
+                        handleGetStudentInfoInput(chatId, messageText);
                         break;
 
                     default:
@@ -113,7 +118,48 @@ public class TgBotService extends TelegramLongPollingBot {
                 answerCallbackQuery.setText(workshopInfo);
                 execute(answerCallbackQuery);
             }
-        } else if (callbackData.startsWith("ENABLE:")) {
+        }
+        else if (callbackData.startsWith("WORKSHOP_TEAM:")){
+            Long workshopId = Long.parseLong(callbackData.split(":")[1]);
+
+            if (workshopId == null) {
+                SendMessage message = new SendMessage();
+                message.setChatId(chatId);
+                message.setText("Мастерская не найдена.");
+                execute(message);
+                return;
+            }
+
+            List<TeamWithStudentInfoDto> teams = studentAppService.getTeamsByProjectWorkshopId(workshopId);
+
+            SendMessage message = new SendMessage();
+            message.setChatId(chatId);
+
+            if (teams.isEmpty()) {
+                message.setText("Команды для последней мастерской пока не сформированы.");
+            } else {
+                StringBuilder teamsInfo = new StringBuilder("Список команд:\n");
+                for (TeamWithStudentInfoDto team : teams) {
+                    teamsInfo.append("- Команда ID: ")
+                            .append(team.getId())
+                            .append("\n  Участники:\n");
+
+                    for (StudentInTeamDto student : team.getStudents()) {
+                        teamsInfo.append("    - Имя: ")
+                                .append(student.getName())
+                                .append(", Телеграм: ")
+                                .append(student.getTelegram())
+                                .append(", Роль: ")
+                                .append(student.getRole())
+                                .append("\n");
+                    }
+                }
+
+                message.setText(teamsInfo.toString());
+            }
+            execute(message);
+        }
+        else if (callbackData.startsWith("ENABLE:")) {
             Long workshopId = Long.parseLong(callbackData.split(":")[1]);
             studentAppService.enableProjectWorkshop(workshopId);
 
@@ -273,6 +319,34 @@ public class TgBotService extends TelegramLongPollingBot {
         execute(createMainMenu(chatId));
     }
 
+    private void handleGetStudentInfoInput(long chatId, String message) throws TelegramApiException {
+        if (message.equals("↩️ Отмена")) {
+            userStates.put(chatId, BotState.DEFAULT);
+            execute(createMainMenu(chatId));
+            return;
+        }
+
+
+        StudentInfoDto studentInfoDto = studentAppService.getStudentProjectWorkshopByTelegram(message);
+
+        userStates.put(chatId, BotState.DEFAULT);
+
+        SendMessage successMessage = new SendMessage();
+        successMessage.setChatId(chatId);
+        successMessage.setText(String.format(
+                "Студент: %s\nРезультат тестов: %d\nРоль: %s\nОпыт: %s\nЯзыки: %s\nОпыт использования языков: %s",
+                studentInfoDto.getTelegram(),
+                studentInfoDto.getTestResult(),
+                studentInfoDto.getRole(),
+                studentInfoDto.getExperience(),
+                studentInfoDto.getLanguageProficiency(),
+                studentInfoDto.getLanguageExperience()
+        ));
+        execute(successMessage);
+
+        execute(createMainMenu(chatId));
+    }
+
     private void startWorkshopCreation(long chatId) throws TelegramApiException {
         userStates.put(chatId, BotState.AWAITING_CREATING_WORKSHOP);
 
@@ -300,11 +374,37 @@ public class TgBotService extends TelegramLongPollingBot {
         else if (messageText.equals("📋 Все мастерские")) {
             handleGetAllWorkshops(chatId);
         }
+        else if (messageText.equals("\uD83D\uDD0E Найти всех студентов")) {
+
+        }
+        else if (messageText.equals("✈\uFE0F Найти студента по нику")) {
+            handleGetStudentInfo(chatId);
+        }
         else if (messageText.equals("👥 Сформировать команды для последней мастерской")) {
             handleFormTeamsForLastWorkshop(chatId);
         } else if (messageText.equals("📋 Получить команды для последней мастерской")) {
             handleGetTeamsForLastWorkshop(chatId);
         }
+        else if (messageText.equals("📋 Получить команды для мастерской")) {
+            handleGetTeamsForSomeWorkshop(chatId);
+        }
+    }
+
+    private void handleGetStudentInfo(long chatId) throws TelegramApiException {
+        userStates.put(chatId, BotState.AWAITING_INPUT_NICKNAME);
+
+        ReplyKeyboardMarkup keyboard = new ReplyKeyboardMarkup();
+        keyboard.setResizeKeyboard(true);
+        KeyboardRow row = new KeyboardRow();
+        row.add("↩️ Отмена");
+        keyboard.setKeyboard(List.of(row));
+
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText("Введите ник студента в телеграмме:");
+        message.setReplyMarkup(keyboard);
+
+        execute(message);
     }
 
     private void handleGetTeamsForLastWorkshop(long chatId) throws TelegramApiException {
@@ -343,6 +443,38 @@ public class TgBotService extends TelegramLongPollingBot {
             }
             message.setText(teamsInfo.toString());
         }
+
+        execute(message);
+    }
+
+    private void handleGetTeamsForSomeWorkshop(long chatId) throws TelegramApiException {
+        List<ProjectWorkshopDto> workshops = studentAppService.getAllProjectWorkshops();
+
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+
+        if (workshops.isEmpty()) {
+            message.setText("Список мастерских пуст.");
+            execute(message);
+            return;
+        }
+
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+
+        for (ProjectWorkshopDto workshop : workshops) {
+            InlineKeyboardButton workshopButton = new InlineKeyboardButton();
+            workshopButton.setText(workshop.getName());
+            workshopButton.setCallbackData("WORKSHOP_TEAM:" + workshop.getId());
+
+            List<InlineKeyboardButton> row = new ArrayList<>();
+            row.add(workshopButton);
+            rows.add(row);
+        }
+
+        inlineKeyboardMarkup.setKeyboard(rows);
+        message.setText("Выберите мастерскую:");
+        message.setReplyMarkup(inlineKeyboardMarkup);
 
         execute(message);
     }
@@ -428,11 +560,19 @@ public class TgBotService extends TelegramLongPollingBot {
         row1.add("📋 Все мастерские");
 
         KeyboardRow row2 = new KeyboardRow();
-        row2.add("👥 Сформировать команды для последней мастерской");
-        row2.add("📋 Получить команды для последней мастерской");
+        row2.add("📋 Получить команды мастерской");
+        row2.add("✈\uFE0F Найти студента по нику");
+
+        KeyboardRow row3 = new KeyboardRow();
+        row3.add("📋 Получить команды для последней мастерской");
+
+        KeyboardRow row4 = new KeyboardRow();
+        row4.add("👥 Сформировать команды для последней мастерской");
 
         keyboard.add(row1);
         keyboard.add(row2);
+        keyboard.add(row3);
+        keyboard.add(row4);
 
         keyboardMarkup.setKeyboard(keyboard);
 
