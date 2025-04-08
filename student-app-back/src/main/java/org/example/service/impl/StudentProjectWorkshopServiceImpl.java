@@ -31,16 +31,16 @@ public class StudentProjectWorkshopServiceImpl implements StudentProjectWorkshop
   private final QuestionnaireRepository questionnaireRepository;
 
   @Override
-  public List<StudentInTeamDto> getAllStudentsByProjectWorkshopId(Long projectWorkshopId) {
+  public List<StudentInfoDto> getAllStudentsByProjectWorkshopId(Long projectWorkshopId) {
     var students =
         studentProjectWorkshopRepository.findAll().stream()
             .filter(student -> projectWorkshopId.equals(student.getProjectWorkshop().getId()))
             .toList();
 
-    var studentsInfo = new ArrayList<StudentInTeamDto>();
+    var studentsInfo = new ArrayList<StudentInfoDto>();
 
     for (var student : students) {
-      studentsInfo.add(studentProjectWorkshopMapper.toStudentInTeamDto(student));
+      studentsInfo.add(studentProjectWorkshopMapper.toStudentInfoDto(student));
     }
 
     return studentsInfo;
@@ -123,6 +123,15 @@ public class StudentProjectWorkshopServiceImpl implements StudentProjectWorkshop
     }
 
     return studentsInTeam;
+  }
+
+  @Override
+  public StudentInfoDto getStudentInfoById(Long id) {
+    var student = studentProjectWorkshopRepository.findById(id);
+    if (student.isEmpty()) {
+      throw new StudentProjectWorkshopNotFoundException("Студент не найден");
+    }
+    return studentProjectWorkshopMapper.toStudentInfoDto(student.get());
   }
 
   @Override

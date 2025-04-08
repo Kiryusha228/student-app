@@ -8,13 +8,15 @@ import org.example.model.entity.StudentProjectWorkshopEntity;
 public interface StudentProjectWorkshopService {
   List<StudentInfoDto> getAllPastStudents();
 
-  List<StudentInTeamDto> getAllStudentsByProjectWorkshopId(Long projectWorkshopId);
+  List<StudentInfoDto> getAllStudentsByProjectWorkshopId(Long projectWorkshopId);
 
   StudentProjectWorkshopEntity getStudentProjectWorkshopById(Long studentProjectWorkshopId);
 
   void createStudentProjectWorkshop(String studentId);
 
   List<StudentInTeamDto> getTeam(String studentId);
+
+  StudentInfoDto getStudentInfoById(Long id);
 
   StudentInfoDto getStudentInfoByTelegram(String telegram);
 
