@@ -38,8 +38,13 @@ public class StudentProjectWorkshopController {
   }
 
   @GetMapping("/get-all-students")
-  public List<StudentInTeamDto> getAllStudentsByProjectWorkshopId(Long projectWorkshopId) {
+  public List<StudentInfoDto> getAllStudentsByProjectWorkshopId(Long projectWorkshopId) {
     return studentProjectWorkshopService.getAllStudentsByProjectWorkshopId(projectWorkshopId);
+  }
+
+  @GetMapping("/get-by-id")
+  public StudentInfoDto getStudentProjectWorkshopByName(Long id) {
+    return studentProjectWorkshopService.getStudentInfoById(id);
   }
 
   @GetMapping("/get-by-name")

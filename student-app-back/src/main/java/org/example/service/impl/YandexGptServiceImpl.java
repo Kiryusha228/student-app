@@ -6,7 +6,11 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import io.github.cdimascio.dotenv.Dotenv;
 import java.io.IOException;
 import java.util.List;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.example.exception.ProjectWorkshopDisabledException;
+import org.example.exception.ProjectWorkshopEnabledException;
 import org.example.exception.YandexGptResponseNotFoundException;
 import org.example.model.dto.database.StudentInfoDto;
 import org.example.model.dto.database.TeamListDto;
@@ -14,10 +18,7 @@ import org.example.model.dto.yandexgpt.Message;
 import org.example.model.dto.yandexgpt.request.CompletionOptions;
 import org.example.model.dto.yandexgpt.request.YandexGptRequest;
 import org.example.model.dto.yandexgpt.response.YandexGptResponse;
-import org.example.service.FileReaderService;
-import org.example.service.StudentProjectWorkshopService;
-import org.example.service.TeamService;
-import org.example.service.YandexGptService;
+import org.example.service.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -36,10 +37,15 @@ public class YandexGptServiceImpl implements YandexGptService {
 
   private final TeamService teamService;
   private final StudentProjectWorkshopService studentProjectWorkshopService;
+  private final ProjectWorkshopService projectWorkshopService;
   private final FileReaderService fileReaderService;
 
   @Override
+  @Transactional
   public void getTeams(String teamCount) {
+    if (projectWorkshopService.getLastProjectWorkshop().getIsEnable()) {
+      throw new ProjectWorkshopEnabledException("Набор на мастерскую еще открыт");
+    }
 
     var students = studentProjectWorkshopService.getAllPastStudents();
 
