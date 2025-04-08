@@ -1,0 +1,126 @@
+.test-page {
+    padding: 100px 300px;
+    margin: 0 auto;
+    background-color: #fff;
+    font-family: sans-serif;
+  }
+  
+  .test-container {
+    margin-top: 40px;
+    padding: 30px;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 12px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.3); 
+    background: #fff;
+  }
+  
+  .left-panel {
+    width: 60%;
+  }
+  
+  .right-panel {
+    width: 35%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .answers .answer-option {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .answers input[type="radio"] {
+    margin-right: 10px;
+  }
+  
+  .submit-btn {
+    margin-top: 15px;
+    padding: 8px 20px;
+    background-color: #ccc;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .submit-btn:disabled {
+    background-color: #eee;
+    cursor: not-allowed;
+  }
+  
+  .timer-box {
+    background-color: #ddd;
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    height: fit-content;
+  }
+  
+  .timer-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .timer-value {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  .question-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin: 10px 0;
+  }
+  
+  .grid-btn {
+    padding: 8px;
+    background-color: #fff;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .grid-btn:hover {
+    background-color: #f7cf02;
+  }
+  
+  .grid-btn.answered {
+    background-color: #27ae60;
+    color: white;
+  }
+  
+  .finish-btn {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #999;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .finished {
+    margin-top: 30px;
+    text-align: center;
+  }
+  
+  .finished h2 {
+    color: #2ecc71;
+  }
+  
+  .finished a {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #f7cf02;
+    color: #000000;
+    border-radius: 6px;
+    text-decoration: none;
+  }
+  
+  .finished a:hover {
+    background-color: #f7cf02;
+  }
+  

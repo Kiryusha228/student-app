@@ -1,0 +1,76 @@
+.questionnaire-page-only {
+    padding: 100px 200px 60px;
+    max-width: 900px;
+    background-color: #ffffff;
+  }
+  
+  .questionnaire-header-only {
+    font-size: 18px;
+    font-weight: normal;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 25px;
+  }
+  
+  .questionnaire-header-only span {
+    margin-left: 10px;
+  }
+  
+  .questionnaire-title-only {
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 25px;
+  }
+  
+  .form-group-only {
+    margin-bottom: 20px;
+  }
+  
+  .form-group-only label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: normal;
+  }
+  
+  .form-group-only input,
+  .form-group-only textarea {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 15px;
+    border:  solid #ececec;
+    border-radius: 10px;
+    background-color: #f0f0f0;
+    box-sizing: border-box;
+  }
+  
+  .form-group-only textarea {
+    resize: none;
+    height: 100px;
+  }
+  
+  .submit-button-only {
+    padding: 12px;
+    background-color: #f7cf02;
+    color: rgb(5, 5, 5);
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: normal;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 15%;
+  }
+  
+  .submit-button-only:hover {
+    background-color: #e3be09;
+  }
+
+  .form-group-only input:hover,
+  .form-group-only input:focus,
+  .form-group-only textarea:hover,
+  .form-group-only textarea:focus {
+    border: 1px solid #f7cf02;
+    outline: none;               
+  }
+  
