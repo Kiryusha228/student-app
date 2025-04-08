@@ -35,7 +35,6 @@ public class TgBotService extends TelegramLongPollingBot {
         AWAITING_CREATING_WORKSHOP,
         AWAITING_CREATING_TEAMS,
         AWAITING_INPUT_NICKNAME,
-        AWAITING_INPUT_PWS,
     }
 
     public TgBotService(TgBotProperties tgBotProperties, StudentAppService studentAppService) {
@@ -136,7 +135,7 @@ public class TgBotService extends TelegramLongPollingBot {
             message.setChatId(chatId);
 
             if (teams.isEmpty()) {
-                message.setText("Команды для последней мастерской пока не сформированы.");
+                message.setText("Команды для данной мастерской пока не сформированы.");
             } else {
                 StringBuilder teamsInfo = new StringBuilder("Список команд:\n");
                 for (TeamWithStudentInfoDto team : teams) {
@@ -374,9 +373,6 @@ public class TgBotService extends TelegramLongPollingBot {
         else if (messageText.equals("📋 Все мастерские")) {
             handleGetAllWorkshops(chatId);
         }
-        else if (messageText.equals("\uD83D\uDD0E Найти всех студентов")) {
-
-        }
         else if (messageText.equals("✈\uFE0F Найти студента по нику")) {
             handleGetStudentInfo(chatId);
         }
@@ -385,7 +381,7 @@ public class TgBotService extends TelegramLongPollingBot {
         } else if (messageText.equals("📋 Получить команды для последней мастерской")) {
             handleGetTeamsForLastWorkshop(chatId);
         }
-        else if (messageText.equals("📋 Получить команды для мастерской")) {
+        else if (messageText.equals("📋 Получить команды мастерской")) {
             handleGetTeamsForSomeWorkshop(chatId);
         }
     }
