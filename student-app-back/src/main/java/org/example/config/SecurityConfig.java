@@ -33,6 +33,7 @@ public class SecurityConfig {
                         "/api/student-project-workshop/get-all-students",
                         "/api/student-project-workshop/get-all-past-students",
                         "/api/student-project-workshop/get-by-name",
+                        "/api/student-project-workshop/get-by-id",
                         "/api/student-project-workshop/get-by-telegram",
                         "/api/project-workshop/**",
                         "/api/hr/**")
