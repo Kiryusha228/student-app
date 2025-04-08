@@ -157,4 +157,19 @@ public class StudentProjectWorkshopServiceImpl implements StudentProjectWorkshop
     return studentProjectWorkshopMapper.toStudentInfoDto(
         studentsProjectWorkshop.get(studentsProjectWorkshop.size() - 1));
   }
+
+  @Override
+  public Boolean checkStudentRegistrationOnProjectWorkshop(String studentId, Long projectWorkshopId) {
+
+    var projectWorkshop = projectWorkshopRepository.findById(projectWorkshopId).get();
+
+    var student = studentRepository.findById(studentId).get();
+
+    var size = student.getStudentProjectWorkshop().size();
+    if (size == 0){
+      return false;
+    }
+
+    return student.getStudentProjectWorkshop().get(size - 1).getProjectWorkshop() == projectWorkshop;
+  }
 }
