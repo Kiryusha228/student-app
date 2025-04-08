@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Configuration
 @EnableScheduling
 @Data
-@PropertySource("application.properties")
+@PropertySource("classpath:application.properties")
 @Component
 public class BotConfig {
 
