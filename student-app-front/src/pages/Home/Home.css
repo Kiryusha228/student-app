@@ -1,0 +1,85 @@
+/* Обнуление и базовые стили для страницы */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+  
+  .home-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url('/public/Фон-2.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    height: 88.5vh;
+  }
+  
+  /* Контейнер для контента */
+  .home-content-wrapper {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+  }
+  
+  /* Контейнер для поля ввода и кнопки */
+  .home-input-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%; /* Добавляем 100% ширины, чтобы поле не сжималось */
+  }
+  
+  /* Поле ввода */
+  .home-input {
+    width: 100%; /* Обеспечивает полную ширину контейнера */
+    padding:17px; /* Добавляем паддинг для увеличения высоты поля */
+    border-radius: 5px 0 0 5px;
+    border: 1px solid #ccc; /* Устанавливаем светлую обводку */
+    box-sizing: border-box; /* Чтобы padding не выходил за пределы ширины */
+    margin-top: 4px;
+  }
+  
+  /* Кнопка продолжить */
+  .home-continue-button {
+    padding: 18px 30px;
+    border: none;
+    background-color: #f7cf02;
+    border-radius: 0 5px 5px 0;
+    margin-top: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Эффект при наведении на кнопку */
+  .home-continue-button:hover {
+    background-color: #d4a700; 
+    cursor: pointer;
+  }
+  
+  /* Ссылки на вход для сотрудников */
+  .home-employee-login {
+    margin-top: 20px;
+  }
+  
+  .home-employee-login a {
+    color: #007bff;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .home-employee-login a:hover {
+    text-decoration: underline;
+  }
+  
+  .home-input:focus {
+    outline: none;
+    border-color: #f7cf02;
+  }
+  
