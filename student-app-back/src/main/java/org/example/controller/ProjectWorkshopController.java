@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:3000"})
 @RequestMapping("/api/project-workshop")
 public class ProjectWorkshopController {
   private final ProjectWorkshopService projectWorkshopService;

@@ -59,7 +59,7 @@ const Registration = () => {
         },
         body: JSON.stringify({
           name: formData.name,
-          password: formData.password,
+          password: formData.password,//getSHA256Hash(formData.password),
           mail: formData.mail
         })
       });
@@ -83,6 +83,14 @@ const Registration = () => {
       setIsLoading(false);
     }
   };
+
+  async function getSHA256Hash(str) {
+    const buf = new TextEncoder().encode(str);
+    const digest = await crypto.subtle.digest('SHA-256', buf);
+    return Array.from(new Uint8Array(digest))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+  }
 
   return (
     <div className="registration-wrapper">

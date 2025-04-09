@@ -1,80 +1,58 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import "./TestPage.css";
 
 const fetchExamQuestions = async (examId) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve([
-        {
-          testQuestion: "Что такое JVM?",
-          answers: [
-            "Java Virtual Machine",
-            "Java Visual Machine",
-            "Java Virtual Memory",
-            "Java Visual Memory",
-            "Все выше перечисленные"
-          ],
-          rightAnswer: 0
-        },
-        {
-          testQuestion: "Какой аннотацией обозначается главный класс Spring Boot приложения?",
-          answers: [
-            "@SpringBootApplication",
-            "@SpringApplication",
-            "@BootApplication",
-            "@MainApplication"
-          ],
-          rightAnswer: 0
-        },
-        {
-          testQuestion: "Какой тип данных в Java используется для хранения целых чисел?",
-          answers: ["int", "float", "double", "String"],
-          rightAnswer: 0
-        },
-        {
-          testQuestion: "Какой тип данных в Java используется для хранения целых чисел?",
-          answers: ["int", "float", "double", "String"],
-          rightAnswer: 0
-        },
-        {
-          testQuestion: "Какой тип данных в Java используется для хранения целых чисел?",
-          answers: ["int", "float", "double", "String"],
-          rightAnswer: 0
-        },
-        {
-          testQuestion: "Какой тип данных в Java используется для хранения целых чисел?",
-          answers: ["int", "float", "double", "String"],
-          rightAnswer: 0
-        },
-        {
-          testQuestion: "Какой тип данных в Java используется для хранения целых чисел?",
-          answers: ["int", "float", "double", "String"],
-          rightAnswer: 0
-        },
-        {
-          testQuestion: "Какой тип данных в Java используется для хранения целых чисел?",
-          answers: ["int", "float", "double", "String"],
-          rightAnswer: 0
-        },
-        {
-          testQuestion: "Какой тип данных в Java используется для хранения целых чисел?",
-          answers: ["int", "float", "double", "String"],
-          rightAnswer: 0
-        },
-        {
-          testQuestion: "Какой тип данных в Java используется для хранения целых чисел?",
-          answers: ["int"],
-          rightAnswer: 0
-        }
-        // Остальные вопросы 
-      ]);
-    }, 500);
-  });
+  try {
+    const token = localStorage.getItem("authToken");
+    const res = await fetch(`http://localhost:8080/api/test/get`, {
+      method: "GET",
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(errorText || "Ошибка при получении вопросов");
+    }
+
+    const contentType = res.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      const data = await res.json();
+      return data;
+    } else {
+      throw new Error("Сервер вернул некорректный формат данных");
+    }
+  } catch (error) {
+    console.error("Ошибка:", error);
+    alert(error.message || "Произошла ошибка при загрузке вопросов.");
+    return [];
+  }
+};
+
+const submitAnswers = async (answers) => {
+  try {
+    const token = localStorage.getItem("authToken");
+    const res = await fetch("http://localhost:8080/api/test/check", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(answers),
+    });
+
+    if (!res.ok) {
+      throw new Error(errorText || "Ошибка при отправке ответов");
+    }
+  } catch (error) {
+    console.error("Ошибка:", error);
+    return null;
+  }
 };
 
 const TestPage = () => {
   const { examId } = useParams();
+  const navigate = useNavigate();
+
   const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState([]);
@@ -89,6 +67,7 @@ const TestPage = () => {
       setTimer((prev) => {
         if (prev <= 1) {
           clearInterval(countdown);
+          handleFinishTest();
           setIsTestFinished(true);
           return 0;
         }
@@ -117,8 +96,25 @@ const TestPage = () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
+      handleFinishTest();
       setIsTestFinished(true);
-      console.log("Ответы отправлены:", newConfirmed); 
+    }
+  };
+
+  const handleFinishTest = async () => {
+    setIsTestFinished(true);
+
+    // Формируем массив ответов с учетом неотвеченных вопросов
+    const answersToSend = Array.from({ length: questions.length }, (_, index) => {
+      const confirmedAnswer = confirmedAnswers[index];
+      return confirmedAnswer !== undefined ? confirmedAnswer + 1 : -1; // +1 для сервера, -1 для неотвеченных
+    });
+
+    const result = await submitAnswers(answersToSend);
+
+    if (result) {
+      console.log("Ответы успешно отправлены!", result);
+      navigate("/personalAccount");
     }
   };
 
@@ -186,7 +182,7 @@ const TestPage = () => {
               ))}
             </div>
             {!isTestFinished && (
-              <button className="finish-btn" onClick={() => setIsTestFinished(true)}>
+              <button className="finish-btn" onClick={handleFinishTest}>
                 Закончить
               </button>
             )}
