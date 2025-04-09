@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/test")
-@CrossOrigin(origins = {"http://localhost:3000"})
 public class TestController {
   private final TestService testService;
   private final StudentTestResultService studentTestResultService;

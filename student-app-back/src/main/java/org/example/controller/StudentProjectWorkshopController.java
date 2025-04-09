@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/student-project-workshop")
-@CrossOrigin(origins = {"http://localhost:3000"})
 public class StudentProjectWorkshopController {
   private final StudentProjectWorkshopService studentProjectWorkshopService;
 

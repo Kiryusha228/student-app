@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./QuestionnairePage.css";
+import { useNavigate } from "react-router-dom";
 
 const QuestionnairePage = () => {
   const [formData, setFormData] = useState({
@@ -11,25 +12,62 @@ const QuestionnairePage = () => {
     technologies: "",
     telegram: "",
     role: "",
-    github: ""
+    github: "",
   });
 
-  // Имитация запроса к базе данных 
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+
+  // Инициализация хука useNavigate внутри компонента
+  const navigate = useNavigate();
+
+  // Загрузка данных при монтировании компонента
   useEffect(() => {
-    setTimeout(() => {
-      const mockDBData = {
-        university: "РГРТУ",
-        graduationYear: "2023",
-        faculty: "Факультет ВМК",
-        experience: "Работал над несколькими pet-проектами и стажировался в стартапе.",
-        programmingSkills: "Python — 4, JavaScript — 3, C++ — 2",
-        technologies: "React, Node.js, PostgreSQL",
-        telegram: "@exampleuser",
-        role: "Fullstack разработчик",
-        github: "https://github.com/example"
-      };
-      setFormData(mockDBData);
-    }, 1000); // эмуляция задержки
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          throw new Error("Требуется авторизация");
+        }
+
+        const res = await fetch("http://localhost:8080/api/questionnaire/get", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!res.ok) {
+          // Если статус ответа не успешный, проверяем наличие текстового ответа
+          const errorText = await res.text();
+          throw new Error(errorText || "Ошибка при получении данных");
+        }
+
+        // Проверяем, что ответ содержит JSON
+        const contentType = res.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          const data = await res.json();
+          setFormData({
+            university: data.university || "",
+            graduationYear: data.graduationYear || "",
+            faculty: data.faculty || "",
+            experience: data.experience || "",
+            programmingSkills: data.languageProficiency || "",
+            technologies: data.languageExperience || "",
+            telegram: data.telegram || "",
+            role: data.role || "",
+            github: data.github || "",
+          });
+        } else {
+          throw new Error("Сервер вернул некорректный формат данных");
+        }
+      } catch (error) {
+        console.error("Ошибка:", error);
+      } finally {
+        setIsDataLoaded(true);
+      }
+    };
+
+    fetchData();
   }, []);
 
   const handleChange = (e) => {
@@ -40,11 +78,64 @@ const QuestionnairePage = () => {
     window.history.back();
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Отправка данных в БД:", formData);
-    alert("Данные отправлены!");
+
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Требуется авторизация");
+      }
+
+      // Сначала проверяем существование анкеты
+      const checkResponse = await fetch("http://localhost:8080/api/questionnaire/get", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const questionnaireExists = checkResponse.ok;
+      const url = questionnaireExists
+        ? "http://localhost:8080/api/questionnaire/update"
+        : "http://localhost:8080/api/questionnaire/add";
+
+      const method = questionnaireExists ? "PATCH" : "POST";
+
+      const res = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          university: formData.university,
+          graduationYear: formData.graduationYear,
+          faculty: formData.faculty,
+          experience: formData.experience,
+          languageProficiency: formData.programmingSkills,
+          languageExperience: formData.technologies,
+          telegram: formData.telegram,
+          role: formData.role,
+          github: formData.github,
+        }),
+      });
+
+      if (!res.ok) {
+        // Попытка получить текст ошибки из ответа
+        const errorText = await res.text();
+        throw new Error(errorText || "Ошибка при отправке данных");
+      }
+
+      console.log("Данные успешно отправлены!");
+      navigate("/personalAccount"); 
+    } catch (error) {
+      console.error("Ошибка:", error);
+    }
   };
+
+  if (!isDataLoaded) {
+    return <div>Загрузка данных...</div>;
+  }
 
   return (
     <div className="questionnaire-page-only">
@@ -53,11 +144,11 @@ const QuestionnairePage = () => {
       </div>
       <h2 className="questionnaire-title-only">Расскажите о себе</h2>
       <form onSubmit={handleSubmit}>
-      <div className="form-group-only">
+        <div className="form-group-only">
           <label>1. Укажите ВУЗ, в котором вы учились или учитесь</label>
           <input
             type="text"
-            name="graduationYear"
+            name="university"
             value={formData.university}
             onChange={handleChange}
             placeholder="ВУЗ"
@@ -84,7 +175,9 @@ const QuestionnairePage = () => {
           />
         </div>
         <div className="form-group-only">
-          <label>4. Расскажите о своём прошлом опыте. Над какими проектами работали? с какими сложностями сталкивались? Чем можете похвастаться? Не стесняйтесь</label>
+          <label>
+            4. Расскажите о своём прошлом опыте. Над какими проектами работали? С какими сложностями сталкивались? Чем можете похвастаться? Не стесняйтесь
+          </label>
           <textarea
             name="experience"
             value={formData.experience}
@@ -93,7 +186,9 @@ const QuestionnairePage = () => {
           ></textarea>
         </div>
         <div className="form-group-only">
-          <label>5. Оцените степень владения языками программирования по шкале от 1 до 5, где 1 — читаю код, 3 — уверенно использую в учебе, 5 — реализовал проект в промышленной разработке. Если знакомы с фреймворками и библиотеками, расскажите и про них. Например: "Python 4, TensorFlow 3, JavaScript 2" </label>
+          <label>
+            5. Оцените степень владения языками программирования по шкале от 1 до 5, где 1 — читаю код, 3 — уверенно использую в учебе, 5 — реализовал проект в промышленной разработке. Если знакомы с фреймворками и библиотеками, расскажите и про них. Например: "Python 4, TensorFlow 3, JavaScript 2"
+          </label>
           <textarea
             name="programmingSkills"
             value={formData.programmingSkills}
@@ -102,7 +197,7 @@ const QuestionnairePage = () => {
           ></textarea>
         </div>
         <div className="form-group-only">
-          <label>6. Расскажите кратко о своем опыте работы с языками/технологиях</label>
+          <label>6. Расскажите кратко о своем опыте работы с языками/технологиями</label>
           <textarea
             name="technologies"
             value={formData.technologies}
@@ -121,7 +216,9 @@ const QuestionnairePage = () => {
           />
         </div>
         <div className="form-group-only">
-          <label>8. В роли кого бы ты хотел быть на проектной мастерской? Варианты: разработчик backend, разработчик frontend, QA, аналитик, могу всё.</label>
+          <label>
+            8. В роли кого бы ты хотел быть на проектной мастерской? Варианты: разработчик backend, разработчик frontend, QA, аналитик, могу всё.
+          </label>
           <input
             type="text"
             name="role"
@@ -140,7 +237,9 @@ const QuestionnairePage = () => {
             placeholder="Ответ"
           />
         </div>
-        <button type="submit" className="submit-button-only">Отправить</button>
+        <button type="submit" className="submit-button-only">
+          Отправить
+        </button>
       </form>
     </div>
   );
