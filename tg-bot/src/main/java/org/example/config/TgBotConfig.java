@@ -12,15 +12,15 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 @Configuration
 @RequiredArgsConstructor
 public class TgBotConfig {
-    private final TgBotService tgBotService;
+  private final TgBotService tgBotService;
 
-    @EventListener({ContextRefreshedEvent.class})
-    public void init() {
-        try {
-            var tgApi = new TelegramBotsApi(DefaultBotSession.class);
-            tgApi.registerBot(tgBotService);
-        } catch (TelegramApiException ex) {
-            ex.printStackTrace();
-        }
+  @EventListener({ContextRefreshedEvent.class})
+  public void init() {
+    try {
+      var tgApi = new TelegramBotsApi(DefaultBotSession.class);
+      tgApi.registerBot(tgBotService);
+    } catch (TelegramApiException ex) {
+      ex.printStackTrace();
     }
+  }
 }

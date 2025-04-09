@@ -1,4 +1,3 @@
 package org.example.config;
 
-public class MessageConfig {
-}
+public class MessageConfig {}

@@ -4,12 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import io.github.cdimascio.dotenv.Dotenv;
+import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
-
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.example.exception.ProjectWorkshopDisabledException;
 import org.example.exception.ProjectWorkshopEnabledException;
 import org.example.exception.YandexGptResponseNotFoundException;
 import org.example.model.dto.database.StudentInfoDto;

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./PersonalAccount.css";
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const examMetaData = {
   1: {
     title: "Анкета",
@@ -27,11 +29,12 @@ const Dashboard = () => {
   const [isRegistered, setIsRegistered] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [teamMembers, setTeamMembers] = useState([]); // Для хранения участников команды
 
   useEffect(() => {
     const fetchLastWorkshop = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/project-workshop/get/last');
+        const response = await fetch(`${apiUrl}/api/project-workshop/get/last`);
         if (!response.ok) throw new Error('Не удалось загрузить данные мастерской');
         const data = await response.json();
         setWorkshop(data);
@@ -45,7 +48,7 @@ const Dashboard = () => {
     const fetchQuestionnaireStatus = async () => {
       const token = localStorage.getItem("authToken");
       try {
-        const res = await fetch("http://localhost:8080/api/questionnaire/get", {
+        const res = await fetch(`${apiUrl}/api/questionnaire/get`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -66,7 +69,7 @@ const Dashboard = () => {
     const fetchTestStatus = async () => {
       const token = localStorage.getItem("authToken");
       try {
-        const res = await fetch("http://localhost:8080/api/test-result/get", {
+        const res = await fetch(`${apiUrl}/api/test-result/get`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -90,7 +93,7 @@ const Dashboard = () => {
       try {
         const token = localStorage.getItem('authToken');
         const response = await fetch(
-          `http://localhost:8080/api/student-project-workshop/check-registration?projectWorkshopId=${workshopId}`,
+          `${apiUrl}/api/student-project-workshop/check-registration?projectWorkshopId=${workshopId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -116,6 +119,23 @@ const Dashboard = () => {
       }
     };
 
+    const fetchTeamMembers = async () => {
+      try {
+        const token = localStorage.getItem("authToken");
+        const response = await fetch(`${apiUrl}/api/student-project-workshop/team`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) throw new Error('Не удалось загрузить данные о команде');
+        const teamData = await response.json();
+        setTeamMembers(teamData); // Устанавливаем участников команды
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+
     const loadData = async () => {
       try {
         setLoading(true);
@@ -132,6 +152,7 @@ const Dashboard = () => {
 
           setExams([questionnaire, test]);
           setActiveTab("exams");
+          await fetchTeamMembers(); // Загружаем участников команды
         }
       } catch (err) {
         setError(err.message);
@@ -149,37 +170,27 @@ const Dashboard = () => {
 
       try {
         const token = localStorage.getItem("authToken");
-
-        const response = await fetch('http://localhost:8080/api/project-workshop/get/last');
+      
+        const response = await fetch(`${apiUrl}/api/project-workshop/get/last`);
         if (!response.ok) throw new Error("Не удалось загрузить мастерскую");
         const workshopData = await response.json();
-
-        setWorkshop(workshopData);
-
-        if (!workshopData.isEnabled) {
-          const teamRes = await fetch("http://localhost:8080/api/student-project-workshop/team", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-
-          if (teamRes.ok) {
-            const team = await teamRes.json();
-            if (Array.isArray(team) && team.length > 0) {
-              setTeamName(team[0].name || "ваша команда");
-              setResultStatus("passed");
-            } else {
-              setResultStatus("failed");
-            }
-          } else {
-            setResultStatus("failed");
-          }
-        } else {
+      
+        // Сначала пробуем получить команду
+        const teamRes = await fetch(`${apiUrl}/api/student-project-workshop/team`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      
+        if (teamRes.ok) {
+          setResultStatus("passed");
+        } else if (workshopData.isEnable) {
           setResultStatus("pending");
+        } else {
+          setResultStatus("failed");
         }
       } catch (err) {
         console.error("Ошибка проверки результатов:", err);
-        setResultStatus("failed");
       }
     };
 
@@ -189,7 +200,7 @@ const Dashboard = () => {
   const handleApplicationClick = async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch('http://localhost:8080/api/student-project-workshop/add', {
+      const response = await fetch(`${apiUrl}/api/student-project-workshop/add`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -279,31 +290,53 @@ const Dashboard = () => {
           </div>
         )}
 
-        {activeTab === "results" && (
-          <div className="results-section">
-            {resultStatus === "pending" && (
-              <div className="result-card pending">
-                <div className="icon">⏳</div>
-                <h2>Идёт отбор</h2>
-                <p>Ваша заявка на рассмотрении. Ожидайте результатов.</p>
+{activeTab === "results" && (
+  <div className="results-section">
+    {/* Блок с результатами */}
+    {resultStatus === "pending" && (
+      <div className="result-card pending">
+        <div className="icon">⏳</div>
+        <h2>Идёт отбор</h2>
+        <p>Ваша заявка на рассмотрении. Ожидайте результатов.</p>
+      </div>
+    )}
+    {resultStatus === "passed" && (
+      <div className="result-card success">
+        <div className="icon">🎉</div>
+        <h2>Поздравляем!</h2>
+        <p>Вы прошли отбор и попали в команду!</p>
+      </div>
+    )}
+    {resultStatus === "failed" && (
+      <div className="result-card failed">
+        <div className="icon">😔</div>
+        <h2>Набор завершён</h2>
+        <p>К сожалению, вы не прошли отбор в этот раз.</p>
+      </div>
+    )}
+
+    {/* Блок со списком участников команды */}
+    {teamMembers.length > 0 && (
+      <div className="team-members">
+        <h3 className="team-members-title">Состав команды:</h3>
+        <div className="team-members-list">
+          {teamMembers.map((member, index) => (
+            <div key={index} className="team-member-card">
+              <div className="team-member-info">
+                <strong>{member.name}</strong>
+                <p>{member.role}</p>
+                <a href={`https://t.me/${member.telegram}`} target="_blank" rel="noopener noreferrer">
+                  {member.telegram}
+                </a>
               </div>
-            )}
-            {resultStatus === "passed" && (
-              <div className="result-card success">
-                <div className="icon">🎉</div>
-                <h2>Поздравляем!</h2>
-                <p>Вы прошли отбор и попали в команду <strong>{teamName}</strong>!</p>
-              </div>
-            )}
-            {resultStatus === "failed" && (
-              <div className="result-card failed">
-                <div className="icon">😔</div>
-                <h2>Набор завершён</h2>
-                <p>К сожалению, вы не прошли отбор в этот раз.</p>
-              </div>
-            )}
-          </div>
-        )}
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+)}
+
       </div>
     </div>
   );

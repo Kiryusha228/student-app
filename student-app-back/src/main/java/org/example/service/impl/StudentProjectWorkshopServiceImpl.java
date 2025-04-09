@@ -160,8 +160,11 @@ public class StudentProjectWorkshopServiceImpl implements StudentProjectWorkshop
 
   @Override
   public List<StudentInfoDto> getStudentsInfoByName(String name) {
-    var students = studentProjectWorkshopRepository.findAll().stream()
-            .filter(student -> student.getStudent().getName().toLowerCase().contains(name.toLowerCase()))
+    var students =
+        studentProjectWorkshopRepository.findAll().stream()
+            .filter(
+                student ->
+                    student.getStudent().getName().toLowerCase().contains(name.toLowerCase()))
             .toList();
 
     if (students.isEmpty()) {
@@ -178,17 +181,19 @@ public class StudentProjectWorkshopServiceImpl implements StudentProjectWorkshop
   }
 
   @Override
-  public Boolean checkStudentRegistrationOnProjectWorkshop(String studentId, Long projectWorkshopId) {
+  public Boolean checkStudentRegistrationOnProjectWorkshop(
+      String studentId, Long projectWorkshopId) {
 
     var projectWorkshop = projectWorkshopRepository.findById(projectWorkshopId).get();
 
     var student = studentRepository.findById(studentId).get();
 
     var size = student.getStudentProjectWorkshop().size();
-    if (size == 0){
+    if (size == 0) {
       return false;
     }
 
-    return student.getStudentProjectWorkshop().get(size - 1).getProjectWorkshop() == projectWorkshop;
+    return student.getStudentProjectWorkshop().get(size - 1).getProjectWorkshop()
+        == projectWorkshop;
   }
 }

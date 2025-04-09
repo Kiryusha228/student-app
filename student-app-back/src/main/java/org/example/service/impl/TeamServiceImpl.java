@@ -2,7 +2,7 @@ package org.example.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.example.exception.ProjectWorkshopDisabledException;
+import org.example.exception.ProjectWorkshopEnabledException;
 import org.example.exception.StudentProjectWorkshopNotFoundException;
 import org.example.mapper.TeamMapper;
 import org.example.model.dto.database.TeamListDto;
@@ -23,8 +23,8 @@ public class TeamServiceImpl implements TeamService {
   @Override
   @Transactional
   public void createTeams(TeamListDto teamListDto) {
-    if (!projectWorkshopService.getLastProjectWorkshop().getIsEnable()) {
-      throw new ProjectWorkshopDisabledException("Набор на последнюю мастерскую закрыт");
+    if (projectWorkshopService.getLastProjectWorkshop().getIsEnable()) {
+      throw new ProjectWorkshopEnabledException("Набор на последнюю мастерскую еще открыт");
     }
 
     var teams = teamListDto.getTeams();
