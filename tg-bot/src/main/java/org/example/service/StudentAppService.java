@@ -122,6 +122,19 @@ public class StudentAppService {
                 .block();
     }
 
+    List<StudentInfoDto> getAllStudentsProjectWorkshopByName(String name) {
+        return webClient.getWebClient()
+                .get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("student-project-workshop/get-all-by-name")
+                        .queryParam("name", name)
+                        .build())
+                .retrieve()
+                .bodyToFlux(StudentInfoDto.class)
+                .collectList()
+                .block();
+    }
+
     StudentInfoDto getStudentProjectWorkshopById(Long id) {
         return webClient.getWebClient()
                 .get()

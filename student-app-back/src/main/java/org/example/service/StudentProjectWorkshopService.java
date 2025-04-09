@@ -22,5 +22,7 @@ public interface StudentProjectWorkshopService {
 
   StudentInfoDto getStudentInfoByName(String name);
 
+  List<StudentInfoDto> getStudentsInfoByName(String name);
+
   Boolean checkStudentRegistrationOnProjectWorkshop(String studentId, Long projectWorkshopId);
 }
