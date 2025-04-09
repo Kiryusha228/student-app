@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./Password.css";
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const PasswordPage = () => {
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -36,7 +38,7 @@ const PasswordPage = () => {
     }
 
     try {
-      const url = 'http://localhost:8080/api/auth/authenticate';
+      const url = `${apiUrl}/api/auth/authenticate`;
       
       const response = await fetch(url, {
         method: 'POST',

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "./Home.css";
 import { useNavigate } from "react-router-dom";
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const HomePage = () => {
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
@@ -17,7 +19,7 @@ const HomePage = () => {
     }
 
     try {
-      const url = `http://localhost:8080/api/student/check?userMail=${encodeURIComponent(email)}`;
+      const url = `${apiUrl}/api/student/check?userMail=${encodeURIComponent(email)}`;
       
       const response = await fetch(url, {
         method: 'GET',

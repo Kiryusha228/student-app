@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import "./TestPage.css";
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const fetchExamQuestions = async (examId) => {
   try {
     const token = localStorage.getItem("authToken");
-    const res = await fetch(`http://localhost:8080/api/test/get`, {
+    const res = await fetch(`${apiUrl}/api/test/get`, {
       method: "GET",
     });
 
@@ -31,7 +33,7 @@ const fetchExamQuestions = async (examId) => {
 const submitAnswers = async (answers) => {
   try {
     const token = localStorage.getItem("authToken");
-    const res = await fetch("http://localhost:8080/api/test/check", {
+    const res = await fetch(`${apiUrl}/api/test/check`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

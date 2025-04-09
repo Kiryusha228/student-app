@@ -12,8 +12,6 @@ public class WebClientConfig {
 
   @Bean
   public WebClient getWebClient() {
-    return WebClient.builder()
-            .baseUrl(dotenv.getDotenv().get("APP_API_URL"))
-            .build();
+    return WebClient.builder().baseUrl(dotenv.getDotenv().get("APP_API_URL")).build();
   }
 }

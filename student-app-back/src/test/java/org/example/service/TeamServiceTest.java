@@ -46,7 +46,7 @@ class TeamServiceTest {
     var teamList = new TeamListDto(List.of(team));
 
     var projectWorkshop = new ProjectWorkshopDto();
-    projectWorkshop.setIsEnable(true);
+    projectWorkshop.setIsEnable(false);
 
     when(teamMapper.toTeamEntity(team)).thenReturn(teamEntity);
     when(teamRepository.save(teamEntity)).thenReturn(teamEntity);
@@ -82,7 +82,7 @@ class TeamServiceTest {
     var teamList = new TeamListDto(List.of(team));
 
     var projectWorkshop = new ProjectWorkshopDto();
-    projectWorkshop.setIsEnable(true);
+    projectWorkshop.setIsEnable(false);
 
     when(teamMapper.toTeamEntity(team)).thenReturn(teamEntity);
     when(teamRepository.save(teamEntity)).thenReturn(teamEntity);

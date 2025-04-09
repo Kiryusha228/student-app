@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import io.github.cdimascio.dotenv.Dotenv;
 import java.io.IOException;
 import java.util.List;
+import org.example.model.dto.database.ProjectWorkshopDto;
 import org.example.model.dto.database.StudentInfoDto;
 import org.example.model.dto.database.TeamDto;
 import org.example.model.dto.database.TeamListDto;
@@ -44,6 +45,7 @@ class YandexGptServiceTest {
   @Mock private TeamService teamService;
 
   @Mock private StudentProjectWorkshopService studentProjectWorkshopService;
+  @Mock private ProjectWorkshopService projectWorkshopService;
 
   @Mock private FileReaderService fileReaderService;
 
@@ -59,7 +61,11 @@ class YandexGptServiceTest {
 
     var students = List.of(student1InfoDto, student2InfoDto);
 
+    var lastProjectWorkshop = new ProjectWorkshopDto();
+    lastProjectWorkshop.setIsEnable(false);
+
     when(studentProjectWorkshopService.getAllPastStudents()).thenReturn(students);
+    when(projectWorkshopService.getLastProjectWorkshop()).thenReturn(lastProjectWorkshop);
 
     when(dotenv.get("YANDEX_API_URL")).thenReturn("fake-yandex-api-url");
     when(dotenv.get("YANDEX_API_KEY")).thenReturn("fake-api-key");

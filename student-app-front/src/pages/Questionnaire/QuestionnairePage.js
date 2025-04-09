@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import "./QuestionnairePage.css";
 import { useNavigate } from "react-router-dom";
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const QuestionnairePage = () => {
   const [formData, setFormData] = useState({
     university: "",
@@ -29,7 +31,7 @@ const QuestionnairePage = () => {
           throw new Error("Требуется авторизация");
         }
 
-        const res = await fetch("http://localhost:8080/api/questionnaire/get", {
+        const res = await fetch(`${apiUrl}/api/questionnaire/get`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -88,7 +90,7 @@ const QuestionnairePage = () => {
       }
 
       // Сначала проверяем существование анкеты
-      const checkResponse = await fetch("http://localhost:8080/api/questionnaire/get", {
+      const checkResponse = await fetch(`${apiUrl}/api/questionnaire/get`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -96,8 +98,8 @@ const QuestionnairePage = () => {
 
       const questionnaireExists = checkResponse.ok;
       const url = questionnaireExists
-        ? "http://localhost:8080/api/questionnaire/update"
-        : "http://localhost:8080/api/questionnaire/add";
+        ? `${apiUrl}/api/questionnaire/update`
+        : `${apiUrl}/api/questionnaire/add`;
 
       const method = questionnaireExists ? "PATCH" : "POST";
 

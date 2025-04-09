@@ -61,6 +61,7 @@ public class StudentProjectWorkshopController {
 
   @GetMapping("/check-registration")
   public Boolean checkRegistration(Principal principal, Long projectWorkshopId) {
-    return studentProjectWorkshopService.checkStudentRegistrationOnProjectWorkshop(principal.getName(), projectWorkshopId);
+    return studentProjectWorkshopService.checkStudentRegistrationOnProjectWorkshop(
+        principal.getName(), projectWorkshopId);
   }
 }
