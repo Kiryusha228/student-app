@@ -35,6 +35,7 @@ public class TgBotService extends TelegramLongPollingBot {
         AWAITING_CREATING_WORKSHOP,
         AWAITING_CREATING_TEAMS,
         AWAITING_INPUT_NICKNAME,
+        AWAITING_INPUT_STUDENT_NAME,
     }
 
     public TgBotService(TgBotProperties tgBotProperties, StudentAppService studentAppService) {
@@ -69,6 +70,8 @@ public class TgBotService extends TelegramLongPollingBot {
                     case AWAITING_INPUT_NICKNAME:
                         handleGetStudentInfoInput(chatId, messageText);
                         break;
+                    case AWAITING_INPUT_STUDENT_NAME:
+                        handleGetStudentInfoInputByName(chatId, messageText);
 
                     default:
                         handleDefaultState(chatId, messageText);
@@ -346,6 +349,35 @@ public class TgBotService extends TelegramLongPollingBot {
         execute(createMainMenu(chatId));
     }
 
+    private void handleGetStudentInfoInputByName(long chatId, String message) throws TelegramApiException {
+        if (message.equals("↩️ Отмена")) {
+            userStates.put(chatId, BotState.DEFAULT);
+            execute(createMainMenu(chatId));
+            return;
+        }
+
+        List<StudentInfoDto> students = studentAppService.getAllStudentsProjectWorkshopByName(message);
+
+        userStates.put(chatId, BotState.DEFAULT);
+
+        SendMessage successMessage = new SendMessage();
+        successMessage.setChatId(chatId);
+        for (StudentInfoDto student : students) {
+            successMessage.setText(String.format(
+                    "Студент: %s\nРезультат тестов: %d\nРоль: %s\nОпыт: %s\nЯзыки: %s\nОпыт использования языков: %s\n",
+                    student.getTelegram(),
+                    student.getTestResult(),
+                    student.getRole(),
+                    student.getExperience(),
+                    student.getLanguageProficiency(),
+                    student.getLanguageExperience()
+            ));
+        }
+        execute(successMessage);
+
+        execute(createMainMenu(chatId));
+    }
+
     private void startWorkshopCreation(long chatId) throws TelegramApiException {
         userStates.put(chatId, BotState.AWAITING_CREATING_WORKSHOP);
 
@@ -373,12 +405,15 @@ public class TgBotService extends TelegramLongPollingBot {
         else if (messageText.equals("📋 Все мастерские")) {
             handleGetAllWorkshops(chatId);
         }
+        else if (messageText.equals("\uD83D\uDC68\u200D\uD83C\uDF93 Найти студента по ФИО")) {
+            handleGetStudentInfoByName(chatId);
+        }
         else if (messageText.equals("✈\uFE0F Найти студента по нику")) {
             handleGetStudentInfo(chatId);
         }
         else if (messageText.equals("👥 Сформировать команды для последней мастерской")) {
             handleFormTeamsForLastWorkshop(chatId);
-        } else if (messageText.equals("📋 Получить команды для последней мастерской")) {
+        } else if (messageText.equals("📋 Получить команды последней мастерской")) {
             handleGetTeamsForLastWorkshop(chatId);
         }
         else if (messageText.equals("📋 Получить команды мастерской")) {
@@ -398,6 +433,23 @@ public class TgBotService extends TelegramLongPollingBot {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setText("Введите ник студента в телеграмме:");
+        message.setReplyMarkup(keyboard);
+
+        execute(message);
+    }
+
+    private void handleGetStudentInfoByName(long chatId) throws TelegramApiException {
+        userStates.put(chatId, BotState.AWAITING_INPUT_STUDENT_NAME);
+
+        ReplyKeyboardMarkup keyboard = new ReplyKeyboardMarkup();
+        keyboard.setResizeKeyboard(true);
+        KeyboardRow row = new KeyboardRow();
+        row.add("↩️ Отмена");
+        keyboard.setKeyboard(List.of(row));
+
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText("Введите фамилию, имя и отчество студента:");
         message.setReplyMarkup(keyboard);
 
         execute(message);
@@ -556,11 +608,12 @@ public class TgBotService extends TelegramLongPollingBot {
         row1.add("📋 Все мастерские");
 
         KeyboardRow row2 = new KeyboardRow();
-        row2.add("📋 Получить команды мастерской");
+        row2.add("\uD83D\uDC68\u200D\uD83C\uDF93 Найти студента по ФИО");
         row2.add("✈\uFE0F Найти студента по нику");
 
         KeyboardRow row3 = new KeyboardRow();
-        row3.add("📋 Получить команды для последней мастерской");
+        row3.add("📋 Получить команды последней мастерской");
+        row3.add("📋 Получить команды мастерской");
 
         KeyboardRow row4 = new KeyboardRow();
         row4.add("👥 Сформировать команды для последней мастерской");
