@@ -21,4 +21,8 @@ public interface StudentProjectWorkshopService {
   StudentInfoDto getStudentInfoByTelegram(String telegram);
 
   StudentInfoDto getStudentInfoByName(String name);
+
+  List<StudentInfoDto> getStudentsInfoByName(String name);
+
+  Boolean checkStudentRegistrationOnProjectWorkshop(String studentId, Long projectWorkshopId);
 }

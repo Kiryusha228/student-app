@@ -1,11 +1,9 @@
 package org.example.dto;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.dto.TeamDto;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor
