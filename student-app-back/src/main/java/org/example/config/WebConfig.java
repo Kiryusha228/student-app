@@ -14,7 +14,12 @@ public class WebConfig {
   public CorsFilter corsFilter() {
     CorsConfiguration config = new CorsConfiguration();
     config.setAllowCredentials(true);
-    config.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+    config.setAllowedOrigins(
+        Arrays.asList(
+            "http://localhost:80",
+            "http://localhost:8082",
+            "http://localhost:3000",
+            "http://localhost"));
     config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With"));
     config.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"));
     config.setMaxAge(3600L);

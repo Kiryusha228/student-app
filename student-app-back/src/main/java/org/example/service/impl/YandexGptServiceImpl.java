@@ -102,8 +102,10 @@ public class YandexGptServiceImpl implements YandexGptService {
       throws JsonProcessingException {
     var completionOptions = new CompletionOptions(false, 0.6, 10000);
 
-    var command =
-        fileReaderService.getFromFile("student-app-back/src/main/resources/yandexGptCommand.txt");
+    //    var command =
+    //
+    // fileReaderService.getFromFile("student-app-back/src/main/resources/yandexGptCommand.txt");
+    var command = fileReaderService.getFromFile("app/resources/yandexGptCommand.txt"); // для докера
     command = command.replace("'teamsCount'", teamCount);
 
     var systemMessage = new Message("system", command);

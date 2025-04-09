@@ -6,6 +6,8 @@ COPY build.gradle.kts build.gradle.kts
 COPY settings.gradle.kts settings.gradle.kts
 COPY .env .env
 
+COPY student-app-back/src/main/resources student-app-back/src/main/resources
+
 COPY student-app-back/src student-app-back/src
 COPY student-app-back/build.gradle.kts student-app-back/build.gradle.kts
 
@@ -17,5 +19,6 @@ WORKDIR /app
 
 COPY --from=build /app/student-app-back/build/libs/*.jar app/student-app-back/app.jar
 COPY --from=build /app/.env .env
+COPY --from=build /app/student-app-back/src/main/resources app/resources
 
 CMD ["java", "-jar", "app/student-app-back/app.jar"]
