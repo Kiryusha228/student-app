@@ -55,6 +55,11 @@ public class StudentProjectWorkshopController {
     return studentProjectWorkshopService.getStudentInfoByTelegram(telegram);
   }
 
+  @GetMapping("/get-all-by-name")
+  public List<StudentInfoDto> getAllStudentsProjectWorkshopByName(String name) {
+    return studentProjectWorkshopService.getStudentsInfoByName(name);
+  }
+
   @GetMapping("/check-registration")
   public Boolean checkRegistration(Principal principal, Long projectWorkshopId) {
     return studentProjectWorkshopService.checkStudentRegistrationOnProjectWorkshop(principal.getName(), projectWorkshopId);

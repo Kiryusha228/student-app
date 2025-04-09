@@ -159,6 +159,25 @@ public class StudentProjectWorkshopServiceImpl implements StudentProjectWorkshop
   }
 
   @Override
+  public List<StudentInfoDto> getStudentsInfoByName(String name) {
+    var students = studentProjectWorkshopRepository.findAll().stream()
+            .filter(student -> student.getStudent().getName().toLowerCase().contains(name.toLowerCase()))
+            .toList();
+
+    if (students.isEmpty()) {
+      throw new StudentNotFoundException("Студент не найден");
+    }
+
+    var allStudentsInfo = new ArrayList<StudentInfoDto>();
+
+    for (var student : students) {
+      allStudentsInfo.add(studentProjectWorkshopMapper.toStudentInfoDto(student));
+    }
+
+    return allStudentsInfo;
+  }
+
+  @Override
   public Boolean checkStudentRegistrationOnProjectWorkshop(String studentId, Long projectWorkshopId) {
 
     var projectWorkshop = projectWorkshopRepository.findById(projectWorkshopId).get();
