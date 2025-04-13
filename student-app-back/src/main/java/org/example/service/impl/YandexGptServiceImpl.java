@@ -2,12 +2,12 @@ package org.example.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.example.client.YandexClient;
 import org.example.exception.ProjectWorkshopEnabledException;
 import org.example.exception.YandexGptResponseNotFoundException;
 import org.example.model.dto.database.StudentInfoDto;
@@ -15,20 +15,13 @@ import org.example.model.dto.database.TeamListDto;
 import org.example.model.dto.yandexgpt.Message;
 import org.example.model.dto.yandexgpt.request.CompletionOptions;
 import org.example.model.dto.yandexgpt.request.YandexGptRequest;
-import org.example.model.dto.yandexgpt.response.YandexGptResponse;
+import org.example.properties.YandexProperties;
 import org.example.service.*;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
 public class YandexGptServiceImpl implements YandexGptService {
-
-  private final WebClient webClient;
-
   private final Dotenv dotenv;
 
   private final ObjectMapper objectMapper;
@@ -37,6 +30,8 @@ public class YandexGptServiceImpl implements YandexGptService {
   private final StudentProjectWorkshopService studentProjectWorkshopService;
   private final ProjectWorkshopService projectWorkshopService;
   private final FileReaderService fileReaderService;
+  private final YandexProperties yandexProperties;
+  private final YandexClient yandexClient;
 
   @Override
   @Transactional
@@ -60,18 +55,7 @@ public class YandexGptServiceImpl implements YandexGptService {
       ex.printStackTrace();
     }
 
-    Mono<YandexGptResponse> responseMono =
-        webClient
-            .post()
-            .uri(apiUrl)
-            .header(HttpHeaders.AUTHORIZATION, "Api-Key " + apiKey)
-            .header("x-folder-id", folderId)
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(request)
-            .retrieve()
-            .bodyToMono(YandexGptResponse.class);
-
-    var createdTeams = responseMono.block();
+    var createdTeams = yandexClient.createTeams(request);
 
     if (createdTeams == null) {
       throw new YandexGptResponseNotFoundException(
@@ -102,21 +86,19 @@ public class YandexGptServiceImpl implements YandexGptService {
       throws JsonProcessingException {
     var completionOptions = new CompletionOptions(false, 0.6, 10000);
 
-    //    var command =
-    //
-    // fileReaderService.getFromFile("student-app-back/src/main/resources/yandexGptCommand.txt");
-    var command = fileReaderService.getFromFile("app/resources/yandexGptCommand.txt"); // для докера
+    // var command = fileReaderService.getFromFile(yandexProperties.getCommandPathForDocker());
+    var command = fileReaderService.getFromFile(yandexProperties.getCommandPathForIde());
     command = command.replace("'teamsCount'", teamCount);
 
     var systemMessage = new Message("system", command);
 
-    ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-    String json = ow.writeValueAsString(students);
+    var objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
+    var json = objectWriter.writeValueAsString(students);
 
     var userMessage = new Message("user", json);
 
     return new YandexGptRequest(
-        "gpt://" + folderId + "/yandexgpt/latest",
+        "gpt://" + folderId + yandexProperties.getModel(),
         completionOptions,
         List.of(systemMessage, userMessage));
   }

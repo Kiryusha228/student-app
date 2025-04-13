@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
     details.put("timestamp", LocalDateTime.now());
 
     var errorResponse = new ExceptionDto(ex.getMessage(), details);
-
+    ex.printStackTrace();
     return new ResponseEntity<>(errorResponse, getStatus(ex.getClass()));
   }
 

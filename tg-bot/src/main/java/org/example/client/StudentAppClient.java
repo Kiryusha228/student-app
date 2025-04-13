@@ -1,20 +1,18 @@
-package org.example.service;
+package org.example.client;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.example.config.DotenvConfig;
 import org.example.config.WebClientConfig;
 import org.example.dto.CreateProjectWorkshopDto;
 import org.example.dto.ProjectWorkshopDto;
 import org.example.dto.StudentInfoDto;
 import org.example.dto.TeamWithStudentInfoDto;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 @RequiredArgsConstructor
-public class StudentAppService {
-  private final DotenvConfig dotenv;
+public class StudentAppClient {
   private final WebClientConfig webClient;
 
   void addProjectWorkshop(CreateProjectWorkshopDto createProjectWorkshopDto) {

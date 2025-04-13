@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.example.client.StudentAppClient;
 import org.example.dto.*;
 import org.example.properties.TgBotProperties;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 public class TgBotService extends TelegramLongPollingBot {
 
   private final TgBotProperties tgBotProperties;
-  private final StudentAppService studentAppService;
+  private final StudentAppClient studentAppService;
 
   private final Map<Long, BotState> userStates = new HashMap<>();
 
@@ -37,7 +38,7 @@ public class TgBotService extends TelegramLongPollingBot {
     AWAITING_INPUT_STUDENT_NAME,
   }
 
-  public TgBotService(TgBotProperties tgBotProperties, StudentAppService studentAppService) {
+  public TgBotService(TgBotProperties tgBotProperties, StudentAppClient studentAppService) {
     super(tgBotProperties.getToken());
     this.tgBotProperties = tgBotProperties;
     this.studentAppService = studentAppService;

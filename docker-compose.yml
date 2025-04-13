@@ -49,50 +49,50 @@ services:
     depends_on:
       - keycloak_db
 
-  student-app-back:
-    container_name: 'student-app-back'
-    image: 'student-app-back'
-    build:
-      context: ./
-      dockerfile: 'student-app-back/Dockerfile'
-    env_file:
-      - .env
-    environment:
-      - JAVA_OPTS=-Xmx512M
-      - SPRING_DATASOURCE_URL=${DB_LINK_BACK}
-      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
-      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
-    ports:
-      - "8080:8080"
-    restart: on-failure
-
-  telegram-bot:
-      container_name: 'telegram-bot'
-      image: 'telegram-bot'
-      build:
-        context: ./
-        dockerfile: 'tg-bot/Dockerfile'
-      env_file:
-        - .env
-      environment:
-        - JAVA_OPTS=-Xmx512M
-        - BOT_NAME=${BOT_NAME}
-        - BOT_TOKEN=${BOT_TOKEN}
-        - APP_API_URL=${APP_API_URL}
-      ports:
-        - "8082:8082"
-      restart: on-failure
-
-  react-app:
-    container_name: 'student-app-front'
-    image: 'student-app-front'
-    build:
-      context: ./student-app-front/
-      dockerfile: 'Dockerfile'
-    env_file:
-      - .env
-    ports:
-      - "80:80"
-    environment:
-      - REACT_APP_API_URL=${REACT_APP_API_URL}
-    restart: always
+#  student-app-back:
+#    container_name: 'student-app-back'
+#    image: 'student-app-back'
+#    build:
+#      context: ./
+#      dockerfile: 'student-app-back/Dockerfile'
+#    env_file:
+#      - .env
+#    environment:
+#      - JAVA_OPTS=-Xmx512M
+#      - SPRING_DATASOURCE_URL=${DB_LINK_BACK}
+#      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+#      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+#    ports:
+#      - "8080:8080"
+#    restart: on-failure
+#
+#  telegram-bot:
+#      container_name: 'telegram-bot'
+#      image: 'telegram-bot'
+#      build:
+#        context: ./
+#        dockerfile: 'tg-bot/Dockerfile'
+#      env_file:
+#        - .env
+#      environment:
+#        - JAVA_OPTS=-Xmx512M
+#        - BOT_NAME=${BOT_NAME}
+#        - BOT_TOKEN=${BOT_TOKEN}
+#        - APP_API_URL=${APP_API_URL}
+#      ports:
+#        - "8082:8082"
+#      restart: on-failure
+#
+#  react-app:
+#    container_name: 'student-app-front'
+#    image: 'student-app-front'
+#    build:
+#      context: ./student-app-front/
+#      dockerfile: 'Dockerfile'
+#    env_file:
+#      - .env
+#    ports:
+#      - "80:80"
+#    environment:
+#      - REACT_APP_API_URL=${REACT_APP_API_URL}
+#    restart: always
