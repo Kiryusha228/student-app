@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class StudentAppClient {
   private final WebClientConfig webClient;
 
-  void addProjectWorkshop(CreateProjectWorkshopDto createProjectWorkshopDto) {
+  public void addProjectWorkshop(CreateProjectWorkshopDto createProjectWorkshopDto) {
     webClient
         .getWebClient()
         .post()
@@ -27,7 +27,7 @@ public class StudentAppClient {
         .block();
   }
 
-  void enableProjectWorkshop(Long projectWorkshopId) {
+  public void enableProjectWorkshop(Long projectWorkshopId) {
     webClient
         .getWebClient()
         .post()
@@ -42,7 +42,7 @@ public class StudentAppClient {
         .block();
   }
 
-  void disableProjectWorkshop(Long projectWorkshopId) {
+  public void disableProjectWorkshop(Long projectWorkshopId) {
     webClient
         .getWebClient()
         .post()
@@ -57,7 +57,7 @@ public class StudentAppClient {
         .block();
   }
 
-  List<TeamWithStudentInfoDto> getTeamsByProjectWorkshopId(Long projectWorkshopId) {
+  public List<TeamWithStudentInfoDto> getTeamsByProjectWorkshopId(Long projectWorkshopId) {
     return webClient
         .getWebClient()
         .get()
@@ -73,7 +73,7 @@ public class StudentAppClient {
         .block();
   }
 
-  ProjectWorkshopDto getLastProjectWorkshop() {
+  public ProjectWorkshopDto getLastProjectWorkshop() {
     return webClient
         .getWebClient()
         .get()
@@ -83,7 +83,7 @@ public class StudentAppClient {
         .block();
   }
 
-  ProjectWorkshopDto getProjectWorkshopById(Long projectWorkshopId) {
+  public ProjectWorkshopDto getProjectWorkshopById(Long projectWorkshopId) {
     return webClient
         .getWebClient()
         .get()
@@ -98,7 +98,7 @@ public class StudentAppClient {
         .block();
   }
 
-  List<ProjectWorkshopDto> getAllProjectWorkshops() {
+  public List<ProjectWorkshopDto> getAllProjectWorkshops() {
     return webClient
         .getWebClient()
         .get()
@@ -109,7 +109,7 @@ public class StudentAppClient {
         .block();
   }
 
-  StudentInfoDto getStudentProjectWorkshopByTelegram(String telegram) {
+  public StudentInfoDto getStudentProjectWorkshopByTelegram(String telegram) {
     return webClient
         .getWebClient()
         .get()
@@ -124,7 +124,7 @@ public class StudentAppClient {
         .block();
   }
 
-  StudentInfoDto getStudentProjectWorkshopByName(String name) {
+  public StudentInfoDto getStudentProjectWorkshopByName(String name) {
     return webClient
         .getWebClient()
         .get()
@@ -139,7 +139,7 @@ public class StudentAppClient {
         .block();
   }
 
-  List<StudentInfoDto> getAllStudentsProjectWorkshopByName(String name) {
+  public List<StudentInfoDto> getAllStudentsProjectWorkshopByName(String name) {
     return webClient
         .getWebClient()
         .get()
@@ -155,7 +155,7 @@ public class StudentAppClient {
         .block();
   }
 
-  StudentInfoDto getStudentProjectWorkshopById(Long id) {
+  public StudentInfoDto getStudentProjectWorkshopById(Long id) {
     return webClient
         .getWebClient()
         .get()
@@ -167,7 +167,7 @@ public class StudentAppClient {
         .block();
   }
 
-  List<StudentInfoDto> getAllStudentsByProjectWorkshopId(Long projectWorkshopId) {
+  public List<StudentInfoDto> getAllStudentsByProjectWorkshopId(Long projectWorkshopId) {
     return webClient
         .getWebClient()
         .get()
@@ -183,7 +183,7 @@ public class StudentAppClient {
         .block();
   }
 
-  List<StudentInfoDto> getAllPastStudentsOnLastProjectWorkshop() {
+  public List<StudentInfoDto> getAllPastStudentsOnLastProjectWorkshop() {
     return webClient
         .getWebClient()
         .get()
@@ -194,7 +194,7 @@ public class StudentAppClient {
         .block();
   }
 
-  void createTeams(String teamCount) {
+  public void createTeams(String teamCount) {
     webClient
         .getWebClient()
         .post()
