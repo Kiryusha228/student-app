@@ -5,7 +5,9 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.example.client.StudentAppClient;
 import org.example.dto.*;
+import org.example.dto.kafka.KafkaRequestDto;
 import org.example.enums.BotState;
+import org.example.kafka.producer.KafkaBotProducer;
 import org.example.service.UserStateService;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -20,6 +22,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 public class MessageHandler {
   private final UserStateService userStateService;
   private final StudentAppClient studentAppClient;
+  private final KafkaBotProducer kafkaBotProducer;
 
   public SendMessage handleCreateWorkshopInput(long chatId, String message)
       throws TelegramApiException {
@@ -43,18 +46,35 @@ public class MessageHandler {
 
   public SendMessage handleCreateTeamInput(long chatId, String message)
       throws TelegramApiException {
+//    if (message.equals("↩️ Отмена")) {
+//      userStateService.setState(chatId, BotState.DEFAULT);
+//      return null;
+//    }
+//
+//    studentAppClient.createTeams(message);
+//
+//    userStateService.setState(chatId, BotState.DEFAULT);
+//
+//    SendMessage successMessage = new SendMessage();
+//    successMessage.setChatId(chatId);
+//    successMessage.setText("Команды сформированы!");
+//    return successMessage;
     if (message.equals("↩️ Отмена")) {
       userStateService.setState(chatId, BotState.DEFAULT);
       return null;
     }
 
-    studentAppClient.createTeams(message);
+    var dto = new KafkaRequestDto();
+    dto.setChatId(chatId);
+    dto.setTeamCount(message);
+
+    kafkaBotProducer.sendInferenceRequest(dto);
 
     userStateService.setState(chatId, BotState.DEFAULT);
 
     SendMessage successMessage = new SendMessage();
     successMessage.setChatId(chatId);
-    successMessage.setText("Команды сформированы!");
+    successMessage.setText("Запрос отправлен");
     return successMessage;
   }
 

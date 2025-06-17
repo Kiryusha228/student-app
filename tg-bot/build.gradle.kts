@@ -25,6 +25,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
 
     implementation("io.github.cdimascio:dotenv-java:2.3.2")
+    //kafka
+    implementation("org.springframework.kafka:spring-kafka")
 
 }
 

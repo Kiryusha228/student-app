@@ -50,7 +50,7 @@ public class TgBotService extends TelegramLongPollingBot {
             break;
           case AWAITING_INPUT_STUDENT_NAME:
             execute(messageHandler.handleGetStudentInfoInputByName(chatId, messageText));
-
+            break;
           default:
             execute(messageHandler.handleDefaultState(chatId, messageText));
         }
